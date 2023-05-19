@@ -1,0 +1,30 @@
+/* 单行省略 */
+.ellipsis-line-1 {
+	overflow: hidden; /* 隐藏内容溢出 */
+	white-space: nowrap; /* 文本不会换行（文本会在同一行直到<br />） */
+	text-overflow: ellipsis; /* 文本溢出显示省略号 */
+}
+
+/* 多行省略 */
+.multi-ellipsis-line-2 {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box; /* 弹性伸缩盒子模型 */
+	-webkit-line-clamp: 2; /* 限制块元素的文本行数 */
+	/* autoprefixer: ignore next */
+	-webkit-box-orient: vertical; /* 伸缩盒对象的子元素的排列方式 */
+}
+
+.line-bottom-1px {
+	position: relative;
+}
+.line-bottom-1px:after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	border-bottom: 1px solid var(--color-border);
+	transform: scaleY(0.5);
+}
