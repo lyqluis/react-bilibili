@@ -4,6 +4,7 @@ import Error from "@/pages/Error"
 import { lazy, Suspense } from "react"
 import Loading from "@/components/Loading"
 import PageLayout from "../layout/PageLayout"
+import RequireAuth from "../components/RequireAuth"
 
 // lazy load components
 const Search = lazy(() => import("@/pages/Search"))
@@ -14,6 +15,8 @@ const Channel = lazy(() => import("@/pages/Channel"))
 const AllChannels = lazy(() => import("@/pages/AllChannels"))
 const Rank = lazy(() => import("@/pages/Rank"))
 const Weekly = lazy(() => import("@/pages/Weekly"))
+const MustSee = lazy(() => import("@/pages/MustSee"))
+const Login = lazy(()=>import('@/pages/Login'))
 
 // page laod
 const lazyload = (Component) => (props) =>
@@ -21,6 +24,13 @@ const lazyload = (Component) => (props) =>
 		<Suspense fallback={<Loading />}>
 			<Component {...props} />
 		</Suspense>
+	)
+
+const checkAuth = (Component) => (props) =>
+	(
+		<RequireAuth>
+			<Component {...props} />
+		</RequireAuth>
 	)
 
 const routes = [
@@ -35,11 +45,15 @@ const routes = [
 					{ path: "", Component: Find },
 					{ path: "rank/:channelName?", Component: lazyload(Rank) },
 					{ path: "weekly", Component: lazyload(Weekly) },
+					{ path: "ruzhanbikan", Component: lazyload(MustSee) },
 				],
 			},
 			{ path: "search", Component: lazyload(Search) },
 			{ path: "shop", Component: lazyload(Shop) },
-			{ path: "user", Component: lazyload(User) },
+			{
+				path: "user/userId?",
+				Component: checkAuth(lazyload(User)),
+			},
 			{
 				path: "channel",
 				Component: lazyload(ChannelLayout),
@@ -51,6 +65,7 @@ const routes = [
 					},
 				],
 			},
+			{ path: "login", Component: lazyload(Login) },
 		],
 	},
 	{ path: "*", Component: Error },

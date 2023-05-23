@@ -27,8 +27,8 @@ import HotSearch from "../components/HotSearch"
 import SearchSuggestion from "../components/SearchSuggestion"
 import SearchResult from "../components/SearchResult"
 import SearchHistory from "../components/SearchHistory"
-import useQuery from "../hooks/useQuery"
 import useFetch from "../hooks/useFetch"
+import { useSearchParams } from "react-router-dom"
 
 const parseSearchData = (data, type = "video") => {
 	return data.result.find((res) => res.result_type === type).data
@@ -47,7 +47,7 @@ export default function Search() {
 	const historyKeywords = useSelector(selectSearchState("historyKeywords"))
 
 	const dispatch = useDispatch()
-	const { urlQuery, setUrlQuery } = useQuery()
+	const [urlQuery, setUrlQuery] = useSearchParams()
 
 	const isIndex = !keyword && !urlQuery.has("keyword")
 	const needSuggestion = keyword && isFocused && suggestions.length > 0

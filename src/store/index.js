@@ -4,6 +4,7 @@ import popularReducer from './popularSlice'
 import searchReducer from './searchSlice'
 import channelReducer from './channelSlice'
 import rankReducer from './rankSlice'
+import userReducer from './userSlice'
 
 export default configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export default configureStore({
     search: searchReducer,
     channel: channelReducer,
     rank: rankReducer,
+    user: userReducer,
   }
 })

@@ -47,3 +47,9 @@ export const formatDuration = duration => {
   const second = parseInt((duration - min * 60) % 60)
   return `${min}:${second < 10 ? '0' + second : second}`
 }
+
+export const isDef = val => {
+  if (Array.isArray(val)) return !!val.length
+  if (typeof val === 'object') return !!Reflect.ownKeys(val).length
+  return val !== null && val !== undefined
+}

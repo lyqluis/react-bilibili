@@ -42,3 +42,20 @@ export const getWeekly = (number) => {
     params: { number }
   }).catch((err) => console.log("error", err))
 }
+
+/**
+ * @func: 入站必看
+ * @param {Number} page
+ * @param {Number} page_size
+ * @return {*}
+ */
+export const getMustSee = (page = 1 /*,  page_size = 20 */) => {
+  return axios({
+    method: 'get',
+    url: '/mustseeall',
+    params: {
+      page,
+      // page_size
+    }
+  }).catch((err) => console.log("error", err))
+}

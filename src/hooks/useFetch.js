@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react"
+import { isDef } from "../utils/global"
 
 // todo combine with redux
-export default function useFetch(fetchData) {
+export default function useFetch(fetchData, originData) {
   const [loading, setLoading] = useState(false)
   const [finished, setFinished] = useState(false)
   const [data, setData] = useState(null)
@@ -23,7 +24,7 @@ export default function useFetch(fetchData) {
 
   useEffect(() => {
     let ignore = false
-    if (!ignore) fetch()
+    if (!ignore && !isDef(originData)) fetch()
     return () => {
       ignore = true
     }

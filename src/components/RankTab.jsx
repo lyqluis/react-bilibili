@@ -64,10 +64,6 @@ export default function RankTab({ channel, onClick }) {
 }
 
 const Wrapper = styled.div`
-	.adm-list-body {
-		border-top: none;
-	}
-
 	.adm-list-item-content-main {
 		display: grid;
 		grid-template-columns: 15px 1fr;

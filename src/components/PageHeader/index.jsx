@@ -1,9 +1,11 @@
 import { Dropdown } from "antd-mobile"
-import { useLocation, Link } from "react-router-dom"
+import { useLocation, Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import { menus } from "./constant"
 import { useState, useRef, useEffect } from "react"
 import Icon from "../Icon"
+import { useSelector } from "react-redux"
+import { selectUserState } from "../../store/userSlice"
 
 const pathReg = /(\/\w*)\/?/
 
@@ -11,6 +13,8 @@ export default function PageHeader() {
 	const { pathname } = useLocation()
 	const [activeMenu, setActiveMenu] = useState(menus[0])
 	const dropdownRef = useRef(null)
+	const userInfo = useSelector(selectUserState("userInfo"))
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		const path = pathname.match(pathReg)
@@ -49,7 +53,16 @@ export default function PageHeader() {
 					</div>
 				</Dropdown.Item>
 			</Dropdown>
-			<div className='header-right'>user avatar</div>
+			<div className='header-right'>
+				{userInfo?.face && (
+					<img
+						className='avator'
+						src={userInfo.face}
+						alt='avator'
+						onClick={() => navigate("/user")}
+					/>
+				)}
+			</div>
 		</Wrapper>
 	)
 }
@@ -69,5 +82,16 @@ const Wrapper = styled.div`
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		position: relative;
+	}
+
+	.avator {
+		position: absolute;
+		right: 20px;
+		width: 30px;
+		height: 30px;
+		overflow: hidden;
+		border-radius: 50%;
+		box-shadow: var(--shadow);
 	}
 `

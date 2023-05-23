@@ -15,13 +15,16 @@ export default function Menu() {
 
 	useEffect(() => {
 		const newIndex = menu.findIndex((item) => {
+			if (location.pathname === "/login") {
+				return item.path === "/user"
+			}
 			if (item.path !== "/") {
 				return location.pathname.includes(item.path)
 			}
 			return item.path === location.pathname
 		})
 		dispatch(changeMenuIndex(newIndex < 0 ? 0 : newIndex))
-	}, [])
+	}, [location])
 
 	return (
 		<Wrapper>

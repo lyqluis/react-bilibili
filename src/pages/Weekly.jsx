@@ -184,12 +184,6 @@ const Wrapper = styled.div`
 			}
 		}
 	}
-
-	.adm-list {
-		&-body {
-			border-top: none;
-		}
-	}
 `
 
 export default Weekly

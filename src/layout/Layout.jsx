@@ -16,6 +16,7 @@ export default function Layout() {
 
 const Wrapper = styled.div`
 	.page {
+		height: 100vh;
 		padding-bottom: ${px2vw`65px`};
 	}
 `

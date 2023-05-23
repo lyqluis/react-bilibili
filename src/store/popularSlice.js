@@ -11,6 +11,8 @@ const popularSlice = createSlice({
     allWeeklyList: [],
     weekly: [],
     weeklyInfo: {},
+    // mustsee
+    mustSeeList: []
   },
   reducers: {
     setList: (state, action) => {
@@ -30,7 +32,10 @@ const popularSlice = createSlice({
     },
     setWeeklyInfo: (state, action) => {
       state.weeklyInfo = action.payload
-    }
+    },
+    setMustSeeList: (state, action) => {
+      state.mustSeeList = action.payload
+    },
   }
 })
 
@@ -48,6 +53,7 @@ export const {
   setWeekly,
   setWeeklyInfo,
   setAllWeeklyList,
+  setMustSeeList,
 } = popularSlice.actions
 
 export default popularSlice.reducer
