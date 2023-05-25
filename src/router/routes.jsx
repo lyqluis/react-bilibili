@@ -16,7 +16,7 @@ const AllChannels = lazy(() => import("@/pages/AllChannels"))
 const Rank = lazy(() => import("@/pages/Rank"))
 const Weekly = lazy(() => import("@/pages/Weekly"))
 const MustSee = lazy(() => import("@/pages/MustSee"))
-const Login = lazy(()=>import('@/pages/Login'))
+const Login = lazy(() => import("@/pages/Login"))
 
 // page laod
 const lazyload = (Component) => (props) =>
@@ -51,7 +51,7 @@ const routes = [
 			{ path: "search", Component: lazyload(Search) },
 			{ path: "shop", Component: lazyload(Shop) },
 			{
-				path: "user/userId?",
+				path: "user/:userId?/:tabName?",
 				Component: checkAuth(lazyload(User)),
 			},
 			{

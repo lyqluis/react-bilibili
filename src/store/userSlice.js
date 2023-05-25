@@ -14,6 +14,7 @@ const userSlice = createSlice({
     },
     isLoggedIn: null,
     userInfo: {},
+    historyInfo: {},
   },
   reducers: {
     setQrcode: (state, action) => {
@@ -25,6 +26,9 @@ const userSlice = createSlice({
     },
     setUserInfo: (state, action) => {
       state.userInfo = action.payload
+    },
+    setHistoryInfo: (state, action) => {
+      state.historyInfo = action.payload
     },
   },
   extraReducers: builder => {
@@ -44,6 +48,7 @@ export const {
   setQrcode,
   setIsLoggedIn,
   setUserInfo,
+  setHistoryInfo,
 } = userSlice.actions
 
 export const fetchLoginInfo = createAsyncThunk('user/fetchLoginInfo', async () => {

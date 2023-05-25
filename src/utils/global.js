@@ -53,3 +53,26 @@ export const isDef = val => {
   if (typeof val === 'object') return !!Reflect.ownKeys(val).length
   return val !== null && val !== undefined
 }
+
+const formatDate = (month, date) => {
+  const now = new Date()
+  const nowMonth = now.getMonth() + 1
+  const nowDate = now.getDate()
+  if (nowMonth === parseInt(month) && nowDate === parseInt(date)) {
+    return `今天`
+  } else if (nowMonth === parseInt(month) && nowDate === parseInt(date) + 1) {
+    return `昨天`
+  }
+  return `${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`
+}
+
+const dayReg = /\d*\/(\d*)\/(\d*) (\d*):(\d*)/
+export const parseDate = time => {
+  const d = new Date(time * 1000)
+  const str = d.toLocaleString()
+  const res = str.match(dayReg)
+  const [month, date, hour, min] = [res[1], res[2], res[3], res[4]]
+  const formatedDate = formatDate(month, date)
+
+  return `${formatedDate} ${hour}:${min}` // mm-dd hh:mm
+}

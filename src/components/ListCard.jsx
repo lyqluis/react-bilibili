@@ -2,9 +2,15 @@ import styled from "styled-components"
 import { Image } from "antd-mobile"
 import { px2vw } from "../utils/style"
 import Icon from "./Icon"
-import { round10k, formatDuration } from "../utils/global"
+import { round10k, formatDuration, parseDate } from "../utils/global"
 
-export default function ListCard({ item }) {
+export default function ListCard({ item, isHistory = false }) {
+	const durationLabel = isHistory
+		? item.progress < 0
+			? "已看完"
+			: `${formatDuration(item.progress)}/${formatDuration(item.duration)}`
+		: formatDuration(item.duration)
+
 	return (
 		<Wrapper>
 			<div className='item-pic'>
@@ -13,10 +19,10 @@ export default function ListCard({ item }) {
 					fit='cover'
 					width='100%'
 					height='100%'
-					src={`${item.pic}@480w_270h_1c.webp`}
+					src={`${item.pic ?? item.cover}@480w_270h_1c.webp`}
 				/>
 				{item.is_union_video && <div className='pic-tag'>合作</div>}
-				<div className='pic-duration'>{formatDuration(item.duration)}</div>
+				<div className='pic-duration'>{durationLabel}</div>
 			</div>
 			<div className='item-info'>
 				<p
@@ -29,23 +35,36 @@ export default function ListCard({ item }) {
 							name='up'
 							className='icon'
 						/>
-						{item.author ?? item?.owner.name}
+						{item.author ?? item?.owner?.name ?? item.author_name}
 					</p>
 					<p className='state'>
-						<span className='play-amount'>
-							<Icon
-								name='play_count'
-								className='icon'
-							/>
-							{round10k(item.play ?? item?.stat.view)}
-						</span>
-						<span className='danmaku-amount'>
-							<Icon
-								name='danmaku'
-								className='icon'
-							/>
-							{round10k(item.danmaku ?? item?.stat.danmaku)}
-						</span>
+						{!isHistory && (
+							<span className='play-amount'>
+								<Icon
+									name='play_count'
+									className='icon'
+								/>
+								{round10k(item.play ?? item?.stat?.view)}
+							</span>
+						)}
+						{!isHistory && (
+							<span className='danmaku-amount'>
+								<Icon
+									name='danmaku'
+									className='icon'
+								/>
+								{round10k(item.danmaku ?? item?.stat?.danmaku)}
+							</span>
+						)}
+						{isHistory && (
+							<span className='danmaku-amount'>
+								<Icon
+									name='history'
+									className='icon'
+								/>
+								{parseDate(item.view_at)}
+							</span>
+						)}
 					</p>
 				</div>
 			</div>
