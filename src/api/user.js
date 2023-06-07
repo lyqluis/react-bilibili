@@ -1,6 +1,21 @@
 import axios from './index'
 
 /**
+ * @func: 获取用户信息
+ * @param {Number} mid, required, user's vmid
+ * @return {Object} res.data
+ */
+export const getUserInfo = (mid) => {
+  return axios({
+    method: 'get',
+    url: '/user_info',
+    params: {
+      mid
+    }
+  }).catch((err) => console.log("error", err))
+}
+
+/**
  * @func: 获取用户状态数值
  * @param {Number} vmid, required, user's vmid
  * @return {Object} res.data
@@ -12,7 +27,7 @@ import axios from './index'
 export const getUserStat = (vmid) => {
   return axios({
     method: 'get',
-    url: '/userstat',
+    url: '/user_stat',
     params: {
       vmid
     }
@@ -51,7 +66,25 @@ export const getFavInfo = (media_id) => {
 }
 
 /**
- * @func: 
+ * @func: 获取收藏夹内容列表
+ * @param {Number} media_id
+ * @param {Number} ps
+ * @return {*}
+ */
+export const getFavContent = (media_id, ps = 10, pn = 1) => {
+  return axios({
+    method: 'get',
+    url: '/fav_content',
+    params: {
+      media_id,
+      ps,
+      pn,
+    }
+  }).catch((err) => console.log("error", err))
+}
+
+/**
+ * @func: 获取观看历史记录
  * @param {Number} max, optional, 历史记录截止目标 id,
  * @param {String} business, optional, 历史记录截止目标业务类型
  * @param {Number} view_at, optional, 历史记录截止时间

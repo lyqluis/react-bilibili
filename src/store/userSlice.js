@@ -1,21 +1,16 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { getLocalIsLoggedIn, setLocalIsLoggedIn } from "../utils/store"
-import { isDef } from "../utils/global"
-import { getLoginInfo } from "../api/login"
+import { createSlice } from "@reduxjs/toolkit"
+import { setLocalIsLoggedIn } from "../utils/store"
+
+const initialState = {
+  userInfo: {},
+  stat: {},
+  historyInfo: {},
+  collectionList: []
+}
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: {
-    // todo remove to a global slice
-    qrcode: {
-      key: null,
-      url: null,
-      img: null,
-    },
-    isLoggedIn: null,
-    userInfo: {},
-    historyInfo: {},
-  },
+  initialState,
   reducers: {
     setQrcode: (state, action) => {
       state.qrcode = action.payload
@@ -27,33 +22,41 @@ const userSlice = createSlice({
     setUserInfo: (state, action) => {
       state.userInfo = action.payload
     },
+    setStat: (state, action) => {
+      state.stat = action.payload
+    },
     setHistoryInfo: (state, action) => {
       state.historyInfo = action.payload
     },
+    setCollectionList: (state, action) => {
+      state.collectionList = action.payload
+    },
+    setCollectionContent: (state, action) => {
+      const { id, content } = action.payload
+      const collection = state.collectionList.find(c => c.id === id)
+      collection.content = content
+    },
+    resetUserState: (state) => {
+      state.userInfo = {}
+      state.stat = {}
+      state.historyInfo = {}
+      state.collectionList = []
+    }
   },
-  extraReducers: builder => {
-    builder.addCase(fetchLoginInfo.fulfilled, (state, action) => {
-      console.log('builder', action.payload)
-      const { isLogin } = action.payload
-      state.isLoggedIn = isLogin
-      setLocalIsLoggedIn(isLogin)
-      state.userInfo = action.payload
-    })
-  }
 })
 
 export const selectUserState = key => state => state.user[key]
+export const selectCollection = id => state => state.user.collectionList.find(c => c.id == id)
 
 export const {
   setQrcode,
   setIsLoggedIn,
   setUserInfo,
+  setStat,
   setHistoryInfo,
+  setCollectionList,
+  setCollectionContent,
+  resetUserState,
 } = userSlice.actions
-
-export const fetchLoginInfo = createAsyncThunk('user/fetchLoginInfo', async () => {
-  const res = await getLoginInfo()
-  return res.data
-})
 
 export default userSlice.reducer

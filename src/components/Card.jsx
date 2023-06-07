@@ -13,7 +13,7 @@ export default function Card({ item, className }) {
 					fit='cover'
 					width='100%'
 					height='100%'
-					src={`${item.pic}@480w_270h_1c.webp`}
+					src={`${item.pic ?? item.cover}@480w_270h_1c.webp`}
 				/>
 				<div className='video-list-item-pic-info'>
 					<span className='play-amount'>
@@ -21,14 +21,16 @@ export default function Card({ item, className }) {
 							name='play_count'
 							className='info-svg'
 						/>
-						{round10k(item.stat?.view ?? item.play)}
+						{round10k(item.stat?.view ?? item.play ?? item?.cnt_info.play)}
 					</span>
 					<span className='danmaku-amount'>
 						<Icon
 							name='danmaku'
 							className='info-svg'
 						/>
-						{round10k(item.stat?.danmaku ?? item.video_review)}
+						{round10k(
+							item.stat?.danmaku ?? item.video_review ?? item?.cnt_info.danmaku
+						)}
 					</span>
 				</div>
 			</div>
@@ -39,7 +41,7 @@ export default function Card({ item, className }) {
 						name='up'
 						className='up-icon'
 					/>
-					{item.owner?.name ?? item.author}
+					{item.owner?.name ?? item.author ?? item?.upper.name}
 				</p>
 			</div>
 		</Wrapper>

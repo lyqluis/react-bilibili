@@ -5,7 +5,6 @@ import postcsspxtoviewport8plugin from 'postcss-px-to-viewport-8-plugin'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 const env = loadEnv('development', process.cwd())
-console.log(env)
 
 // https://vitejs.dev/config/
 /* eslint-disable-next-line no-unused-vars */

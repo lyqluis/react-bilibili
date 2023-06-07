@@ -5,6 +5,8 @@ import { lazy, Suspense } from "react"
 import Loading from "@/components/Loading"
 import PageLayout from "../layout/PageLayout"
 import RequireAuth from "../components/RequireAuth"
+import { redirect } from "react-router-dom"
+import store from "../store"
 
 // lazy load components
 const Search = lazy(() => import("@/pages/Search"))
@@ -17,6 +19,7 @@ const Rank = lazy(() => import("@/pages/Rank"))
 const Weekly = lazy(() => import("@/pages/Weekly"))
 const MustSee = lazy(() => import("@/pages/MustSee"))
 const Login = lazy(() => import("@/pages/Login"))
+const ListPage = lazy(() => import("@/pages/ListPage"))
 
 // page laod
 const lazyload = (Component) => (props) =>
@@ -32,6 +35,17 @@ const checkAuth = (Component) => (props) =>
 			<Component {...props} />
 		</RequireAuth>
 	)
+
+// const checkAuthLoader = async () => {
+// const status = store.getState().auth.fetchLoginInfoStatus
+// if (status === "idle") {
+// 	await store.dispatch(fetchLoginInfo())
+// }
+// // not login
+// // return redirect('/login')
+// // is logined
+// // return null
+// }
 
 const routes = [
 	{
@@ -53,6 +67,19 @@ const routes = [
 			{
 				path: "user/:userId?/:tabName?",
 				Component: checkAuth(lazyload(User)),
+				// loader: ({ params }) => {
+				// 	// loader happens before global store's dispath fetchLoginInfo
+				// 	if (!params?.userId) {
+				// 		const id = store.getState().auth.authInfo?.mid
+				// 		if (id) return redirect(`/user/${id}`)
+				// 	}
+				// 	return null
+				// },
+			},
+			{
+				path: "user/:userId?/favorite/:fav_id",
+				Component: checkAuth(lazyload(ListPage)),
+				loader: async () => "loader data",
 			},
 			{
 				path: "channel",

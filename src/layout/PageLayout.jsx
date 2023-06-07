@@ -6,11 +6,13 @@ import { getScroller } from "../utils/global"
 import { Outlet } from "react-router-dom"
 import PageHeader from "../components/PageHeader"
 
-export default function PageLayout({ header, children }) {
+export default function PageLayout({
+	header = <PageHeader />,
+	children = <Outlet />,
+}) {
 	const [headerClass, setHeaderClass] = useState("page-header")
 	const [lastY, setLastY] = useState(0)
 	const refEl = useRef()
-	// const dispatch = useDispatch()
 
 	useEffect(() => {
 		const el = getScroller(refEl.current)
@@ -32,12 +34,8 @@ export default function PageLayout({ header, children }) {
 
 	return (
 		<Wrapper ref={refEl}>
-			<header className={headerClass}>
-				<PageHeader />
-			</header>
-			<div className='page-content'>
-				<Outlet></Outlet>
-			</div>
+			<header className={headerClass}>{header}</header>
+			<div className='page-content'>{children}</div>
 		</Wrapper>
 	)
 }

@@ -1,11 +1,9 @@
 import { useSelector } from "react-redux"
-import { selectUserState } from "../store/userSlice"
-import { Navigate } from "react-router-dom"
-import {} from "react-router-dom"
-import { useLocation } from "react-router-dom"
+import { selectAuthState } from "../store/authSlice"
+import { Navigate, useLocation } from "react-router-dom"
 
 const RequireAuth = ({ children }) => {
-	const isLoggedIn = useSelector(selectUserState("isLoggedIn"))
+	const isLoggedIn = useSelector(selectAuthState("isLoggedIn"))
 	const location = useLocation()
 
 	// fetchLoginInfo has not got data yet

@@ -1,7 +1,7 @@
 import { checkQRCode, getQRCodeImg, getQRCodeKey } from "../api/login"
 import { useState, useEffect, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { selectUserState, setIsLoggedIn, setQrcode } from "../store/userSlice"
+import { selectAuthState, setIsLoggedIn, setQrcode } from "../store/authSlice"
 import Icon from "./Icon"
 import styled, { keyframes } from "styled-components"
 import { px2vw } from "../utils/style"
@@ -11,7 +11,7 @@ const QrCode = ({ from, to }) => {
 	const [qrcodeStatus, setQrcodeStatus] = useState(null)
 	const [isCodeLoading, setIsCodeLoading] = useState(false)
 	const timer = useRef(null)
-	const qrcode = useSelector(selectUserState("qrcode"))
+	const qrcode = useSelector(selectAuthState("qrcode"))
 	const isCodeOutdated = qrcodeStatus?.code === 86038
 	const isCodeScanned = qrcodeStatus?.code === 86090
 	const isLoginSuccess = qrcodeStatus?.code === 0

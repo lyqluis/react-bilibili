@@ -1,7 +1,13 @@
 import styled from "styled-components"
 import { px2vw } from "../utils/style"
 
-export default function Section({ children, title, leftTitle, rightTitle }) {
+export default function Section({
+	children,
+	title,
+	leftTitle,
+	rightTitle,
+	contentClass,
+}) {
 	return (
 		<Wrapper>
 			<div className='section-title'>
@@ -9,7 +15,7 @@ export default function Section({ children, title, leftTitle, rightTitle }) {
 				<span className='sction-title-center'>{title}</span>
 				<span className='sction-title-right'>{rightTitle}</span>
 			</div>
-			<div className='section-content'>{children}</div>
+			<div className={`section-content ${contentClass}`}>{children}</div>
 		</Wrapper>
 	)
 }

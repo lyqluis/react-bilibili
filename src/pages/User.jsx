@@ -1,32 +1,50 @@
 import { useEffect } from "react"
-import useFetch from "../hooks/useFetch"
 import { logout } from "../api/login"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { selectUserState, setUserInfo } from "../store/userSlice"
-import { getUserStat } from "../api/user"
+import { selectUserState, setUserInfo, setStat } from "../store/userSlice"
+import { getUserInfo, getUserStat } from "../api/user"
 import styled from "styled-components"
 import { px2vw } from "../utils/style"
 import Icon from "../components/Icon"
 import { Tabs } from "antd-mobile"
 import HistoryTab from "../components/HistoryTab"
 import { useState } from "react"
+import CollectionTab from "../components/CollectionTab"
+import { selectAuthState } from "../store/authSlice"
+import useRequest from "../hooks/useRequest"
 
 const tabs = [
-	{ title: "收藏", name: "favorite", logo: "fav", element: "" },
+	{ title: "收藏", name: "favorite", logo: "fav", element: <CollectionTab /> },
 	{ title: "历史", name: "history", logo: "fav", element: <HistoryTab /> },
 	{ title: "动态", name: "space", logo: "fav", element: "" },
 	{ title: "视频", name: "video", logo: "fav", element: "" },
 ]
 
+// todo get user info from url params
 export default function User() {
 	const userInfo = useSelector(selectUserState("userInfo"))
-	const { data: userStat, finished: userStatFinished } = useFetch(
-		() => getUserStat(userInfo.mid),
-		userInfo.stat
-	)
+	const stat = useSelector(selectUserState("stat"))
+	const authInfo = useSelector(selectAuthState("authInfo"))
 	const [activeTab, setActiveTab] = useState(tabs[0])
 	const { userId, tabName } = useParams()
+
+	const {
+		data: userData,
+		finished: userDataFinished,
+		request: fetchUserInfo,
+	} = useRequest(() => getUserInfo(parseInt(userId)), {
+		manual: true,
+		deps: [userId],
+	})
+	const {
+		data: statData,
+		finished: statDataFinished,
+		request: fetchUserStat,
+	} = useRequest(() => getUserStat(parseInt(userId)), {
+		manual: true,
+		deps: [userId],
+	})
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const handleClick = async () => {
@@ -37,63 +55,84 @@ export default function User() {
 	}
 
 	useEffect(() => {
-		if (userStatFinished) {
-			dispatch(setUserInfo({ ...userInfo, stat: userStat.data }))
+		// redirect
+		if (!userId) {
+			navigate(`/user/${authInfo.mid}`)
 		}
-	}, [userStat])
+		// fetch data
+		if (userId != userInfo?.card?.mid) {
+			fetchUserInfo()
+			fetchUserStat()
+		}
+	}, [userId])
 
 	useEffect(() => {
-		if (userId != userInfo.mid) {
-			navigate(`/user/${userInfo.mid}`)
+		if (userDataFinished) {
+			dispatch(setUserInfo(userData.data))
 		}
-	}, [userInfo, userId])
+	}, [userData])
 
 	useEffect(() => {
-		const targetTab = tabs.find((t) => t.name === tabName) ?? tabs[0]
-		setActiveTab(targetTab)
+		if (statDataFinished) {
+			dispatch(setStat(statData.data))
+		}
+	}, [statData])
+
+	useEffect(() => {
+		if (tabName) {
+			const targetTab = tabs.find((t) => t.name === tabName) ?? tabs[0]
+			setActiveTab(targetTab)
+		}
 	}, [tabName])
+
+	if (!userInfo.card) return <h1>loading</h1>
 
 	return (
 		<Wrapper>
 			<section className='user-background'>
 				<img
-					src={userInfo.face}
+					src={userInfo?.card?.face}
 					alt=''
 				/>
 			</section>
+
 			<section className='user-info'>
 				<img
-					src={userInfo.face}
+					src={userInfo.card?.face}
 					alt='user-avator'
 					className='user-avator'
 				/>
 				<p className='user-name'>
-					<span>{userInfo.uname}</span>
+					<span>{userInfo.card?.name}</span>
 					<Icon
 						className='user-level-svg'
-						name={`user_levels-l_${userInfo.level_info.current_level}`}
+						name={`user_levels-l_${userInfo.card.level_info.current_level}`}
 					/>
 				</p>
-				<p className='user-mid'>mid: {userInfo.mid}</p>
+				<p className='user-mid'>mid: {userInfo.card.mid}</p>
 				<div className='user-info-stat'>
 					<p className='user-info-stat-item'>
-						<span className='num'>{userInfo.stat?.follower}</span>
+						<span className='num'>{stat.follower}</span>
 						<span>follower</span>
 					</p>
 					<p className='user-info-stat-item'>
-						<span className='num'>{userInfo.stat?.following}</span>
+						<span className='num'>{stat.following}</span>
 						<span>following</span>
 					</p>
 					<p className='user-info-stat-item'>
-						<span className='num'>{userInfo.stat?.whisper}</span>
+						<span className='num'>{stat?.whisper}</span>
 						<span>whisper</span>
 					</p>
 				</div>
 			</section>
+
+			{/* // todo */}
+			<button onClick={handleClick}>logout</button>
+
 			<Tabs
 				activeKey={activeTab.name}
 				onChange={(key) => {
-					navigate(`/user/${userInfo.mid}/${key}`)
+					navigate(`/user/${userInfo.card.mid}/${key}`)
 				}}
 				style={{ position: "sticky", top: 0 }}
 			>
@@ -101,15 +140,13 @@ export default function User() {
 					return (
 						<Tabs.Tab
 							key={tab.name}
-							title={tab.title} // todo logo + title
+							title={tab.title}
 						>
 							{tab.element}
 						</Tabs.Tab>
 					)
 				})}
 			</Tabs>
-
-			<button onClick={handleClick}>logout</button>
 		</Wrapper>
 	)
 }
@@ -223,7 +260,7 @@ const Wrapper = styled.div`
 		}
 		.adm-tabs-content {
 			padding: 0;
-			.adm-list-body{
+			.adm-list-body {
 				border-top: none;
 			}
 		}

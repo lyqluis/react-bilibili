@@ -5,15 +5,15 @@ import { menus } from "./constant"
 import { useState, useRef, useEffect } from "react"
 import Icon from "../Icon"
 import { useSelector } from "react-redux"
-import { selectUserState } from "../../store/userSlice"
+import { selectAuthState } from "../../store/authSlice"
 
 const pathReg = /(\/\w*)\/?/
 
-export default function PageHeader() {
+export default function PageHeader({ left, center, right }) {
 	const { pathname } = useLocation()
 	const [activeMenu, setActiveMenu] = useState(menus[0])
 	const dropdownRef = useRef(null)
-	const userInfo = useSelector(selectUserState("userInfo"))
+	const authInfo = useSelector(selectAuthState("authInfo"))
 	const navigate = useNavigate()
 
 	useEffect(() => {
@@ -28,36 +28,44 @@ export default function PageHeader() {
 
 	return (
 		<Wrapper className='line-bottom-1px'>
-			<Icon
-				name='logo'
-				className='left-logo'
-			/>
-			<Dropdown ref={dropdownRef}>
-				<Dropdown.Item
-					key='selector'
-					title={activeMenu.title}
-				>
-					<div className='header-menus'>
-						{menus.map((menu) => {
-							return (
-								<Link
-									to={menu.path}
-									key={menu.title}
-									onClick={() => changeMenu(menu)}
-									className={activeMenu === menu ? "active" : ""}
-								>
-									{menu.title}
-								</Link>
-							)
-						})}
-					</div>
-				</Dropdown.Item>
-			</Dropdown>
+			<div className='header-left'>
+				{left ?? (
+					<Icon
+						name='logo'
+						className='left-logo'
+					/>
+				)}
+			</div>
+			<div className='header-center'>
+				{center ?? (
+					<Dropdown ref={dropdownRef}>
+						<Dropdown.Item
+							key='selector'
+							title={activeMenu.title}
+						>
+							<div className='header-menus'>
+								{menus.map((menu) => {
+									return (
+										<Link
+											to={menu.path}
+											key={menu.title}
+											onClick={() => changeMenu(menu)}
+											className={activeMenu === menu ? "active" : ""}
+										>
+											{menu.title}
+										</Link>
+									)
+								})}
+							</div>
+						</Dropdown.Item>
+					</Dropdown>
+				)}
+			</div>
 			<div className='header-right'>
-				{userInfo?.face && (
+				{authInfo?.face && (
 					<img
 						className='avator'
-						src={userInfo.face}
+						src={authInfo.face}
 						alt='avator'
 						onClick={() => navigate("/user")}
 					/>
@@ -72,9 +80,39 @@ const Wrapper = styled.div`
 	display: grid;
 	grid-template-columns: auto 1fr auto;
 
-	.left-logo {
+	.header-left {
 		width: 30vw;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+	}
+
+	.left-logo {
+		width: 100%;
 		color: var(--color-main-4);
+	}
+
+	.header-center {
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		/* align-items: center; */
+
+		.adm-dropdown {
+			background: transparent;
+		}
+		.adm-dropdown .adm-dropdown-nav {
+			height: 100%;
+			border: none;
+		}
+		.adm-dropdown
+			.adm-dropdown-nav
+			.adm-dropdown-item
+			.adm-dropdown-item-title {
+			padding: 0;
+			font-size: var(--font-size-m);
+		}
 	}
 
 	.header-right {

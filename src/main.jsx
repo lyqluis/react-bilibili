@@ -5,7 +5,7 @@ import "@/styles"
 import "virtual:svg-icons-register"
 import { Provider } from "react-redux"
 import store from "./store"
-import { fetchLoginInfo } from "./store/userSlice.js"
+import { fetchLoginInfo } from "./store/authSlice.js"
 
 store.dispatch(fetchLoginInfo())
 

@@ -6,14 +6,16 @@
 - [x] differ login page & user page
   - use a global login flag to confirm login status
 - [x] page header: right img avator
+- [x] sperate store: user & auth
+- [ ] useRequest hook
 - [ ] user page
   - switch tab & router
   - [x] history tab
     - [ ] can not get next page data
-  - [ ] 收藏 tab
+  - [x] 收藏 tab
+    - [x] card list page
   - [ ] 动态 tab
   - [ ] 视频 tab
-- [ ] sperate user & auth
 - [ ] concat some store slice into popular slice
 - [ ] useFetch, isDef origin data
 - [ ] Bottom Menu, switch to 1st menu is too slow

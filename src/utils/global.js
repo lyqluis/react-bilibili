@@ -76,3 +76,5 @@ export const parseDate = time => {
 
   return `${formatedDate} ${hour}:${min}` // mm-dd hh:mm
 }
+
+export const PAGE_SIZE = 5

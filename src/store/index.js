@@ -5,6 +5,7 @@ import searchReducer from './searchSlice'
 import channelReducer from './channelSlice'
 import rankReducer from './rankSlice'
 import userReducer from './userSlice'
+import authReducer from './authSlice'
 
 export default configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export default configureStore({
     channel: channelReducer,
     rank: rankReducer,
     user: userReducer,
+    auth: authReducer,
   }
 })

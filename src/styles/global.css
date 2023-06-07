@@ -49,17 +49,6 @@ body {
 	--adm-font-size-9: var(--font-size-xm);
 }
 
-.adm-dropdown {
-	background: transparent;
-}
-.adm-dropdown .adm-dropdown-nav {
-	height: 100%;
-	border: none;
-}
-.adm-dropdown .adm-dropdown-nav .adm-dropdown-item .adm-dropdown-item-title {
-	padding: 0;
-	font-size: var(--font-size-m);
-}
 .adm-dropdown-popup .adm-dropdown-popup-body .header-menus {
 	padding: 10px;
 	display: flex;
