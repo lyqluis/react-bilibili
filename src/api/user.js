@@ -107,3 +107,62 @@ export const getUserHistory = (options = { max: 0, business: '', view_at: 0, typ
   }).catch((err) => console.log("error", err))
 }
 
+/**
+ * @func: 获取用户动态
+ * @param {Number} uid, user's id
+ * @param {String} offsetId, 动态对象.desc.dynamic_id_str
+ * @return {Object}
+ * - attentions {Object}
+ * - cards {[Obejct]}
+ * - has_more {1|0}
+ * - next_offset {Number}
+ */
+export const getUserDynamics = (uid, offsetId) => {
+  return axios({
+    method: 'get',
+    url: '/space/dynamics',
+    params: {
+      uid,
+      offsetId
+    }
+  }).catch((err) => console.log("error", err))
+}
+
+/**
+ * @func: 获取用户发布的视频
+ * @param {Object}
+ * - {Number} mid, required, user's id
+ * - {String} order, sort order, pubdate (default)| click | stow 收藏
+ * - {Number} tid, 0 (default), 分区 id, 筛选目标分区
+ * - {String} keyword, 关键词筛选
+ * - {Number} pn, page number
+ * - {Number} ps, page size, 30 (default), [1, 50]
+ * - {String} w_id, required, Wbi 签名
+ * - {Number} wts, required, Wbi 当前时间戳
+ * @return {*}
+ */
+export const getUserVideos = ({
+  mid,
+  w_id,
+  wts,
+  order = 'pubdate',  // click | stow
+  tid = 0,
+  keyword = '',
+  pn = 1,
+  ps = 30,
+}) => {
+  return axios({
+    method: 'post',
+    url: '/space/videos',
+    data: {
+      mid,
+      order,
+      tid,
+      keyword,
+      pn,
+      ps,
+      w_id,
+      wts,
+    }
+  }).catch((err) => console.log("error", err))
+}

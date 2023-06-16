@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { selectUserState, setHistoryInfo } from "../store/userSlice"
 import ListCard from "./ListCard"
 
-const HistoryTab = () => {
+const HistoryTab = ({ uid }) => {
 	const [inited, setInited] = useState(false)
 	const [hasMore, setHasMore] = useState(true)
 	const historyInfo = useSelector(selectUserState("historyInfo"))

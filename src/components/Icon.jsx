@@ -1,10 +1,13 @@
 import styled from "styled-components"
 
-export default function Icon({ name, className, onClick }) {
+export default function Icon({ name, className, onClick, style }) {
 	const symbolId = `#icon-${name}`
 
 	return (
-		<Wrapper onClick={onClick}>
+		<Wrapper
+			onClick={onClick}
+			style={style}
+		>
 			<svg
 				className={className}
 				aria-hidden='true'

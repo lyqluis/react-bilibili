@@ -78,3 +78,9 @@ export const parseDate = time => {
 }
 
 export const PAGE_SIZE = 5
+
+export const isLongPic = pic => {
+  if (!pic) return
+  const { img_width: width, img_height: height } = pic
+  return height / width >= 2
+}

@@ -5,7 +5,8 @@ const initialState = {
   userInfo: {},
   stat: {},
   historyInfo: {},
-  collectionList: []
+  collectionList: [],
+  dynamic: {},
 }
 
 const userSlice = createSlice({
@@ -36,12 +37,10 @@ const userSlice = createSlice({
       const collection = state.collectionList.find(c => c.id === id)
       collection.content = content
     },
-    resetUserState: (state) => {
-      state.userInfo = {}
-      state.stat = {}
-      state.historyInfo = {}
-      state.collectionList = []
-    }
+    setDynamic: (state, action) => {
+      state.dynamic = action.payload
+    },
+    resetUserState: () => initialState
   },
 })
 
@@ -57,6 +56,7 @@ export const {
   setCollectionList,
   setCollectionContent,
   resetUserState,
+  setDynamic,
 } = userSlice.actions
 
 export default userSlice.reducer

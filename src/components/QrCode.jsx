@@ -151,7 +151,7 @@ const Wrapper = styled.div`
 	padding: 20px;
 	width: 80%;
 	margin: 0 auto;
-	background: var(--color-main-negtive);
+	background: var(--color-main-negative);
 	border-radius: 10px;
 	box-shadow: var(--shadow);
 

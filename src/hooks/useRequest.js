@@ -9,6 +9,7 @@ const useRequest = (fetchFn, options) => {
   const {
     manual = false,
     // initialData = null,
+    ready= true,
     pollingInterval = 0,
     deps = []
   } = options
@@ -23,6 +24,7 @@ const useRequest = (fetchFn, options) => {
     try {
       setLoading(true)
       setFinished(false)
+      setErr(null)
       // todo pollinginterval timeout
       const res = await fetchFn()
       console.log(fetchFn.name, res)

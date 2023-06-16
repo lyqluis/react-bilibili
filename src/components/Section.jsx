@@ -7,9 +7,14 @@ export default function Section({
 	leftTitle,
 	rightTitle,
 	contentClass,
+	style,
+	className,
 }) {
 	return (
-		<Wrapper>
+		<Wrapper
+			style={style}
+			className={className}
+		>
 			<div className='section-title'>
 				<span className='sction-title-left'>{leftTitle}</span>
 				<span className='sction-title-center'>{title}</span>
@@ -37,6 +42,7 @@ const Wrapper = styled.section`
 			justify-self: end;
 		}
 	}
+	
 	.section-content {
 		font-weight: 300;
 		font-size: var(--font-size-xm);

@@ -1,34 +1,70 @@
-import { useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { logout } from "../api/login"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { selectUserState, setUserInfo, setStat } from "../store/userSlice"
+import {
+	selectUserState,
+	setUserInfo,
+	setStat,
+	resetUserState,
+} from "../store/userSlice"
 import { getUserInfo, getUserStat } from "../api/user"
 import styled from "styled-components"
 import { px2vw } from "../utils/style"
 import Icon from "../components/Icon"
 import { Tabs } from "antd-mobile"
 import HistoryTab from "../components/HistoryTab"
-import { useState } from "react"
 import CollectionTab from "../components/CollectionTab"
+import DynamicTab from "../components/DynamicTab"
 import { selectAuthState } from "../store/authSlice"
 import useRequest from "../hooks/useRequest"
 
-const tabs = [
-	{ title: "收藏", name: "favorite", logo: "fav", element: <CollectionTab /> },
-	{ title: "历史", name: "history", logo: "fav", element: <HistoryTab /> },
-	{ title: "动态", name: "space", logo: "fav", element: "" },
-	{ title: "视频", name: "video", logo: "fav", element: "" },
+const TABS = [
+	{
+		title: "动态",
+		name: "space",
+		logo: "fav",
+		Element: DynamicTab,
+		requireAuth: false,
+	},
+	{
+		title: "视频",
+		name: "video",
+		logo: "fav",
+		Element: "",
+		requireAuth: false,
+	},
+	{
+		title: "收藏",
+		name: "favorite",
+		logo: "fav",
+		Element: CollectionTab,
+		requireAuth: true,
+	},
+	{
+		title: "历史",
+		name: "history",
+		logo: "fav",
+		Element: HistoryTab,
+		requireAuth: true,
+	},
 ]
 
 // todo get user info from url params
 export default function User() {
+	// const [tabs, setTabs] = useState(TABS)
 	const userInfo = useSelector(selectUserState("userInfo"))
 	const stat = useSelector(selectUserState("stat"))
 	const authInfo = useSelector(selectAuthState("authInfo"))
-	const [activeTab, setActiveTab] = useState(tabs[0])
 	const { userId, tabName } = useParams()
-
+	const tabs = useMemo(() => {
+		if (userId == authInfo.mid) {
+			return TABS
+		} else {
+			return TABS.filter((tab) => !tab.requireAuth)
+		}
+	}, [userId])
+	const [activeTab, setActiveTab] = useState(tabs[0])
 	const {
 		data: userData,
 		finished: userDataFinished,
@@ -37,6 +73,7 @@ export default function User() {
 		manual: true,
 		deps: [userId],
 	})
+
 	const {
 		data: statData,
 		finished: statDataFinished,
@@ -55,14 +92,15 @@ export default function User() {
 	}
 
 	useEffect(() => {
-		// redirect
 		if (!userId) {
+			// redirect
 			navigate(`/user/${authInfo.mid}`)
-		}
-		// fetch data
-		if (userId != userInfo?.card?.mid) {
+		} else if (userId != userInfo?.card?.mid) {
+			// fetch data
 			fetchUserInfo()
 			fetchUserStat()
+			// reset user's data
+			dispatch(resetUserState())
 		}
 	}, [userId])
 
@@ -136,13 +174,14 @@ export default function User() {
 				}}
 				style={{ position: "sticky", top: 0 }}
 			>
+				{/* // todo not auth user slice the tabs */}
 				{tabs.map((tab) => {
 					return (
 						<Tabs.Tab
 							key={tab.name}
 							title={tab.title}
 						>
-							{tab.element}
+							<tab.Element uid={userId} />
 						</Tabs.Tab>
 					)
 				})}

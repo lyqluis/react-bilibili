@@ -1,23 +1,30 @@
-- [x] finished weekly page
+- [x] weekly page
 - [x] delete usequery hook
-- [x] finished MustSee page
-- [x] feate qr code component
-- [x] feate login page
-- [x] differ login page & user page
-  - use a global login flag to confirm login status
+- [x] MustSee page
+- [x] qr code component
+- [x] login page
+- [x] protect user page from login page
+  - use a global login flag when app inited to confirm login status
 - [x] page header: right img avator
 - [x] sperate store: user & auth
 - [ ] useRequest hook
+  - [ ] manual request function export from useRequest can't use in the InifiniteScroll component, it will execute twice while once expected
 - [ ] user page
   - switch tab & router
   - [x] history tab
-    - [ ] can not get next page data
   - [x] 收藏 tab
     - [x] card list page
   - [ ] 动态 tab
+    - [x] dynamic list
+    - [x] 点击大图
+      - [x] 多图查看
+    - [ ] video style, bottom line
+    - [ ] 点开评论
+    - [ ] 转发
+    - [ ] 点赞
   - [ ] 视频 tab
 - [ ] concat some store slice into popular slice
-- [ ] useFetch, isDef origin data
+- [ ] useRequest, can't work with Infinite-scroll component
 - [ ] Bottom Menu, switch to 1st menu is too slow
 - [ ] init app to get login stat if the backend crapped, the process should be optimized
 
@@ -26,5 +33,6 @@
 - [x] login related api
 - [ ] user related api
   - [x] favorite collections
-  - [ ] space 动态
+  - [x] space 动态
   - [ ] 发布的 videos
+    - [ ] Wbi 签名算法

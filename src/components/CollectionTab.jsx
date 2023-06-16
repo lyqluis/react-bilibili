@@ -17,19 +17,19 @@ import useRequest from "../hooks/useRequest"
 
 const skeletons = CardSkeletonList(2)
 
-const CollectionTab = () => {
+const CollectionTab = ({ uid }) => {
 	const location = useLocation()
 	const [loading, setLoading] = useState(null)
 	const userInfo = useSelector(selectUserState("userInfo"))
 	const collectionList = useSelector(selectUserState("collectionList"))
-	const { userId } = useParams()
+	// const { userId } = useParams()
 	const {
 		data: favouriteData,
 		finished: favouriteDataFinished,
 		request: fetchFavs,
-	} = useRequest(() => getUserFavorites(parseInt(userId)), {
+	} = useRequest(() => getUserFavorites(parseInt(uid)), {
 		manual: true,
-		deps: [userId],
+		deps: [uid],
 	})
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
@@ -45,10 +45,10 @@ const CollectionTab = () => {
 	}
 
 	useEffect(() => {
-		if (!collectionList.length || userId != userInfo?.card?.mid) {
+		if (!collectionList.length || (uid && uid != userInfo?.card?.mid)) {
 			fetchFavs()
 		}
-	}, [userId])
+	}, [uid])
 
 	useEffect(() => {
 		if (favouriteDataFinished) {
