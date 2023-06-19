@@ -132,37 +132,41 @@ export const getUserDynamics = (uid, offsetId) => {
  * @func: 获取用户发布的视频
  * @param {Object}
  * - {Number} mid, required, user's id
+ * - {String} w_id, required, Wbi 签名
+ * - {Number} wts, required, Wbi 当前时间戳
  * - {String} order, sort order, pubdate (default)| click | stow 收藏
  * - {Number} tid, 0 (default), 分区 id, 筛选目标分区
  * - {String} keyword, 关键词筛选
  * - {Number} pn, page number
  * - {Number} ps, page size, 30 (default), [1, 50]
- * - {String} w_id, required, Wbi 签名
- * - {Number} wts, required, Wbi 当前时间戳
  * @return {*}
  */
-export const getUserVideos = ({
-  mid,
-  w_id,
-  wts,
-  order = 'pubdate',  // click | stow
-  tid = 0,
-  keyword = '',
-  pn = 1,
-  ps = 30,
-}) => {
+export const getUserVideos = (
+  {
+    mid,
+    w_id,
+    wts,
+    order = 'pubdate',  // click | stow
+    tid = 0,
+    keyword = '',
+    pn = 1,
+    ps = 30,
+  },
+  // { query },
+) => {
   return axios({
-    method: 'post',
+    method: 'get',
     url: '/space/videos',
-    data: {
+    params: {
       mid,
       order,
       tid,
       keyword,
       pn,
       ps,
-      w_id,
-      wts,
+      // w_id,
+      // wts,
+      // query,
     }
   }).catch((err) => console.log("error", err))
 }

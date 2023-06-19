@@ -8,6 +8,10 @@ export default function ListCard({ item, isHistory = false }) {
 	const durationLabel = isHistory
 		? item.progress < 0
 			? "已看完"
+			: item.badge === "专栏"
+			? "专栏"
+			: item.progress === 0 && item.duration === 0
+			? "直播"
 			: `${formatDuration(item.progress)}/${formatDuration(item.duration)}`
 		: formatDuration(item.duration)
 
@@ -22,7 +26,7 @@ export default function ListCard({ item, isHistory = false }) {
 					src={`${item.pic ?? item.cover}@480w_270h_1c.webp`}
 				/>
 				{item.is_union_video && <div className='pic-tag'>合作</div>}
-				<div className='pic-duration'>{durationLabel}</div>
+				<div className='pic-duration'>{item?.length ?? durationLabel}</div>
 			</div>
 			<div className='item-info'>
 				<p
@@ -53,7 +57,9 @@ export default function ListCard({ item, isHistory = false }) {
 									name='danmaku'
 									className='icon'
 								/>
-								{round10k(item.danmaku ?? item?.stat?.danmaku)}
+								{round10k(
+									item.danmaku ?? item?.stat?.danmaku ?? item.video_review
+								)}
 							</span>
 						)}
 						{isHistory && (

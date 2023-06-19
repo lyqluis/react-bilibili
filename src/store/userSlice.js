@@ -7,6 +7,7 @@ const initialState = {
   historyInfo: {},
   collectionList: [],
   dynamic: {},
+  videos: {}
 }
 
 const userSlice = createSlice({
@@ -40,6 +41,22 @@ const userSlice = createSlice({
     setDynamic: (state, action) => {
       state.dynamic = action.payload
     },
+    setVideos: (state, action) => {
+      const newListObj = action.payload.list
+      const oldListObj = state.videos?.list
+      const listObj = {}
+      if (oldListObj) {
+        for (const list in oldListObj) {
+          if (Array.isArray(oldListObj[list])) {
+            listObj[list] = oldListObj[list].slice().concat(newListObj[list])
+          } else {
+            listObj[list] = oldListObj[list]
+          }
+        }
+        action.payload.list = listObj
+      }
+      state.videos = action.payload
+    },
     resetUserState: () => initialState
   },
 })
@@ -57,6 +74,7 @@ export const {
   setCollectionContent,
   resetUserState,
   setDynamic,
+  setVideos,
 } = userSlice.actions
 
 export default userSlice.reducer

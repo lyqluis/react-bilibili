@@ -16,6 +16,7 @@ import { Tabs } from "antd-mobile"
 import HistoryTab from "../components/HistoryTab"
 import CollectionTab from "../components/CollectionTab"
 import DynamicTab from "../components/DynamicTab"
+import VideoTab from "../components/VideoTab"
 import { selectAuthState } from "../store/authSlice"
 import useRequest from "../hooks/useRequest"
 
@@ -31,7 +32,7 @@ const TABS = [
 		title: "视频",
 		name: "video",
 		logo: "fav",
-		Element: "",
+		Element: VideoTab,
 		requireAuth: false,
 	},
 	{

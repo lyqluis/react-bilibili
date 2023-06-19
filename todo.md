@@ -22,17 +22,18 @@
     - [ ] 点开评论
     - [ ] 转发
     - [ ] 点赞
-  - [ ] 视频 tab
+  - [x] 视频 tab
+- [ ] shopping page
 - [ ] concat some store slice into popular slice
-- [ ] useRequest, can't work with Infinite-scroll component
 - [ ] Bottom Menu, switch to 1st menu is too slow
 - [ ] init app to get login stat if the backend crapped, the process should be optimized
 
 ### bili-node-api
 
 - [x] login related api
-- [ ] user related api
+- [x] user related api
   - [x] favorite collections
   - [x] space 动态
-  - [ ] 发布的 videos
-    - [ ] Wbi 签名算法
+  - [x] 发布的 videos
+    - [x] Wbi 签名算法
+- [ ] 会员购 related api
