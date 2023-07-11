@@ -84,3 +84,34 @@ export const isLongPic = pic => {
   const { img_width: width, img_height: height } = pic
   return height / width >= 2
 }
+
+const QUERY_EXP = /\?([\w_=&#%]*)/
+export const getQueryString = (url) => {
+  const res = url.match(QUERY_EXP)
+  return res[1]
+}
+
+export const getFilterObj = location => {
+  const hash = location.hash.match(/#([\w_=&%]*)/)[1]
+  const decodedHash = decodeURIComponent(decodeURIComponent(hash))
+  const query = location.search.match(/\?([\w_=&]*)/)[1]
+  const filterArr = [...decodedHash.split("&"), ...query.split("&")]
+  const filter = {}
+  filterArr.map((val) => {
+    const res = val.split("=")
+    filter[res[0]] = res[0] === "detailFilter" ? JSON.parse(res[1]) : res[1]
+  })
+  return filter
+}
+
+export const formatIndexList = data => {
+  const res = { ...data }
+  const list = data.filterList
+  const newList = []
+  list.forEach((item) => {
+    newList.push(...Object.entries(item))
+  })
+  res.filterList = newList
+  console.log("fetch all filter", newList)
+  return res
+}

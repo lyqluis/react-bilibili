@@ -6,6 +6,7 @@ import channelReducer from './channelSlice'
 import rankReducer from './rankSlice'
 import userReducer from './userSlice'
 import authReducer from './authSlice'
+import mallReducer from './mallSlice'
 
 export default configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export default configureStore({
     rank: rankReducer,
     user: userReducer,
     auth: authReducer,
+    mall: mallReducer,
   }
 })

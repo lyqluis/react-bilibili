@@ -1,5 +1,4 @@
 - [x] weekly page
-- [x] delete usequery hook
 - [x] MustSee page
 - [x] qr code component
 - [x] login page
@@ -23,10 +22,25 @@
     - [ ] 转发
     - [ ] 点赞
   - [x] 视频 tab
+  - [ ] logout button
 - [ ] shopping page
+  - [ ] search
+  - [ ] filter bar
+    - [x] filter popup selector
+    - [ ] filter page selector
+      - [ ] price input box
+      - [x] filter index list
+        - [ ] bug: 外层选中后，打开内层选择其他，回到外层，原来选定的样式消失
+  - [x] tabs
+  - [x] waterfall
+    - [x] waterfall work with InfiniteScroll (useLayoutEffect)
+  - [ ] all kinds page
+  - [ ] products waterfall page
 - [ ] concat some store slice into popular slice
 - [ ] Bottom Menu, switch to 1st menu is too slow
 - [ ] init app to get login stat if the backend crapped, the process should be optimized
+- [ ] 节流优化
+  - [ ] PageLayout 中的滚动监听
 
 ### bili-node-api
 

@@ -51,9 +51,7 @@ const TABS = [
 	},
 ]
 
-// todo get user info from url params
 export default function User() {
-	// const [tabs, setTabs] = useState(TABS)
 	const userInfo = useSelector(selectUserState("userInfo"))
 	const stat = useSelector(selectUserState("stat"))
 	const authInfo = useSelector(selectAuthState("authInfo"))

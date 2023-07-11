@@ -9,6 +9,7 @@ import PageHeader from "../components/PageHeader"
 export default function PageLayout({
 	header = <PageHeader />,
 	children = <Outlet />,
+	stickyEl,
 }) {
 	const [headerClass, setHeaderClass] = useState("page-header")
 	const [lastY, setLastY] = useState(0)
@@ -21,12 +22,15 @@ export default function PageLayout({
 			setLastY((oldVal) => {
 				if (oldVal < y && parseInt(px2vw(y + "px")) >= parseInt(px2vw`45px`)) {
 					setHeaderClass(`page-header hidden`)
+					stickyEl && (stickyEl.current.style.top = 0)
 				} else {
 					setHeaderClass(`page-header`)
+					stickyEl && (stickyEl.current.style.top = px2vw("45px"))
 				}
 				return y
 			})
 		})
+
 		return () => {
 			el.removeEventListener("scroll", handleScroll)
 		}
