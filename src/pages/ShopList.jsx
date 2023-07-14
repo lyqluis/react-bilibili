@@ -2,7 +2,7 @@ import PageLayout from "../layout/PageLayout"
 import styled from "styled-components"
 import { useLocation } from "react-router-dom"
 import { useState, useEffect, useRef } from "react"
-import { getFilterObj } from "../utils/global"
+import { getFilterObj, formateFilter } from "../utils/global"
 import useRequest from "../hooks/useRequest"
 import { getProducts } from "../api/mall"
 import WaterFall from "../components/WaterFall"
@@ -17,7 +17,7 @@ import FilterBar from "./FilterBar"
 
 const defaultFilter = {
 	keyword: "",
-	filters: "",
+	filters: {},
 	priceFlow: "",
 	priceCeil: "",
 	sortType: "totalrank", // 排序，totalrank | sale | price | pubtime, 综合｜销量｜价格｜新品
@@ -31,6 +31,30 @@ const defaultFilter = {
 	pageSize: 32, // page size, default: 32
 	// from: "pc_show",
 	msource: "",
+}
+
+const urlFilter = {
+	noReffer: "true",
+	sortType: "totalrank",
+	sortOrder: "false",
+	isInStock: "false",
+	detailFilter: {
+		categories: {
+			6: '["0,2,3,5,6,7"]',
+		},
+		categoriesName: {
+			6: '["单品"]',
+		},
+		price: {
+			priceCeil: "",
+			priceFlow: "",
+		},
+	},
+	noTitleBar: "1",
+	page: "category_list",
+	from: "category_sb",
+	category: "1_107",
+	scene: "figure",
 }
 
 const ShopList = () => {
@@ -51,9 +75,11 @@ const ShopList = () => {
 	const products = useSelector(selectMallState("productsList"))
 
 	useEffect(() => {
-		const filter = getFilterObj(location)
+		const urlFilter = getFilterObj(location)
+		console.log("filter from url", urlFilter)
+		const filter = formateFilter(urlFilter, defaultFilter)
+		console.log("filter", filter)
 		setFilter(filter)
-		console.log("filter from url", filter)
 	}, [location])
 
 	useEffect(() => {

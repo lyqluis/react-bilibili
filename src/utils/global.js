@@ -92,7 +92,7 @@ export const getQueryString = (url) => {
 }
 
 export const getFilterObj = location => {
-  const hash = location.hash.match(/#([\w_=&%]*)/)[1]
+  const hash = location.hash.match(/#([\w_=&%]*)/)?.[1]
   const decodedHash = decodeURIComponent(decodeURIComponent(hash))
   const query = location.search.match(/\?([\w_=&]*)/)[1]
   const filterArr = [...decodedHash.split("&"), ...query.split("&")]
@@ -113,5 +113,37 @@ export const formatIndexList = data => {
   })
   res.filterList = newList
   console.log("fetch all filter", newList)
+  return res
+}
+
+export const formateFilter = (rawFilter, defaultFilter) => {
+  const res = Object.assign({}, defaultFilter)
+  for (const key in res) {
+    if (rawFilter[key]) {
+      res[key] = rawFilter[key]
+    }
+  }
+  // category
+  rawFilter.category &&
+    res.termQueries.push({
+      field: 'category',
+      values: [rawFilter.category]
+    })
+  // detailfilter
+  if (rawFilter.detailFilter) {
+    const detailFilter = rawFilter.detailFilter
+    const categories = Object.entries(detailFilter.categories)
+    res.termQueries.push(...categories.map(([key, val]) => {
+      res.filters[key] = val
+      return {
+        field: key,
+        values: val
+      }
+    }))
+    const price = detailFilter.price
+    res.priceCeil = price.priceCeil
+    res.priceFlow = price.priceFlow
+  }
+  // todo rangeQueries
   return res
 }

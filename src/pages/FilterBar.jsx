@@ -1,17 +1,12 @@
-import { IndexBar, Dropdown, Popup, List } from "antd-mobile"
+import { Dropdown } from "antd-mobile"
 import styled from "styled-components"
-import { useState, useEffect, useRef, forwardRef } from "react"
+import { useState, useRef, forwardRef } from "react"
 import Icon from "../components/Icon"
-import { px2vw } from "../utils/style"
-import { getFilterAllFilters } from "../api/mall"
-import { formatIndexList } from "../utils/global"
-import { useDispatch, useSelector } from "react-redux"
-import { selectMallState, setAllFilterList } from "../store/mallSlice"
-import FilterIndexList from "../components/FilterIndexList"
+import FilterPopup from "../components/FilterPopup"
 
 const defaultFilter = {
 	keyword: "",
-	filters: "",
+	filters: {},
 	priceFlow: "",
 	priceCeil: "",
 	sortType: "totalrank", // 排序，totalrank | sale | price | pubtime, 综合｜销量｜价格｜新品
@@ -19,7 +14,7 @@ const defaultFilter = {
 	pageIndex: 1, // 页数
 	userId: "",
 	state: "",
-	scene: "PC_list", // PC_list | figure
+	scene: "figure", // PC_list | figure
 	termQueries: [], // required，获取商品数据必须的查询参数
 	rangeQueries: [],
 	pageSize: 32, // page size, default: 32
@@ -40,50 +35,11 @@ const SINGLE_TYPES = [
 	{ name: "blind", title: "盲盒", value: "4" },
 ]
 
-const SelectCard = ({ filter, onClick, isSelected }) => {
-	const handleClick = (e) => {
-		onClick && onClick(!isSelected, filter)
-	}
-
-	return (
-		<SelectCardWrapper
-			className={isSelected ? "selected" : ""}
-			onClick={handleClick}
-		>
-			{filter.name}
-		</SelectCardWrapper>
-	)
-}
-
-const SelectCardWrapper = styled.div`
-	padding: 0 10px;
-	font-size: var(--font-size-s);
-	font-weight: 300;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
-	height: ${px2vw`40px`};
-	background: var(--color-border);
-	border-radius: var(--radius);
-
-	&.selected {
-		background: var(--color-main-4);
-		color: var(--color-background);
-	}
-`
-
 const FilterBar = forwardRef(
 	({ filter, setFilter, searchFilter = [] }, ref) => {
 		const [visible, setVisible] = useState(false)
 		const [sortType1, setSortType1] = useState(SORT_TYPES[0])
 		const [singleState, setSingleState] = useState(SINGLE_TYPES[0])
-		const [selectedFilters, setSelectedFilters] = useState([])
-		const [indexListVisible, setIndexListVisible] = useState(false)
-
-		const dispatch = useDispatch()
-		const allFilterList = useSelector(selectMallState("allFilterList"))
-		const [currentAllFiltersType, setCurrentAllFiltersType] = useState("")
 
 		const sortTypeRef = useRef(null)
 		const singleStateRef = useRef(null)
@@ -95,65 +51,6 @@ const FilterBar = forwardRef(
 				setFilter({ ...filter, sortType: "price", sortOrder: "asc" })
 			}
 		}
-
-		// watch filterbar's single value's change to setFilter
-		// useEffect(() => {}, [])
-
-		const selectFilter = (isSelected, filter) => {
-			if (isSelected) {
-				setSelectedFilters([...selectedFilters, filter])
-			} else {
-				setSelectedFilters(selectedFilters.filter((f) => f.id !== filter.id))
-			}
-			// todo request to fetch the count
-		}
-
-		const confirmFilterIndexList = (indexFilters) => {
-			const otherFilters = selectedFilters.filter(
-				(f) => f.parentKey !== currentAllFiltersType.key
-			)
-			setSelectedFilters([...otherFilters, ...indexFilters])
-
-			// todo delete
-			// filters width other parentKey or with same id & parentKey
-			// const keepFilters = selectedFilters.filter(
-			// 	(f) =>
-			// 		f.parentKey !== currentAllFiltersType.key ||
-			// 		(f.parentKey === currentAllFiltersType.key &&
-			// 			indexFilters.some((filter) => filter.id === f.id))
-			// )
-			// const addFilters = indexFilters.filter(
-			// 	(filter) =>
-			// 		!selectedFilters.some(
-			// 			(f) => f.parentKey === filter.parentKey && f.id === filter.id
-			// 		)
-			// )
-			// console.log(keepFilters, addFilters)
-			// setSelectedFilters([...keepFilters, ...addFilters])
-		}
-
-		const toggleIndexList = async (filter) => {
-			console.log("all list", filter)
-			setIndexListVisible(true)
-			setCurrentAllFiltersType(filter)
-
-			if (!allFilterList[filter.key]) {
-				const res = await getFilterAllFilters(filter.key)
-				console.log("fetch all filter", res)
-				const allListInfo = formatIndexList(res.data)
-				dispatch(
-					setAllFilterList({ ...allFilterList, [filter.key]: allListInfo })
-				)
-			}
-		}
-
-		const resetSelectedFilters = () => {
-			setSelectedFilters([])
-		}
-
-		useEffect(() => {
-			console.log("selected filters", selectedFilters)
-		}, [selectedFilters])
 
 		return (
 			<FilterBarWrapper
@@ -310,82 +207,18 @@ const FilterBar = forwardRef(
 					</div>
 				</div>
 
-				<Popup
+				<FilterPopup
+					// Popup's props
 					position='right'
 					visible={visible}
 					bodyStyle={{ width: "90vw" }}
 					onMaskClick={() => setVisible(false)}
-				>
-					<PopupBoard>
-						<ul className='search-filters'>
-							<li className='filter'>
-								<section className='title'>价格区间</section>
-								<div className='content'>todo input = input</div>
-							</li>
-							{searchFilter.map((filter) => {
-								return (
-									<li
-										key={filter.key}
-										className='filter'
-									>
-										<section className='title'>
-											{filter.title}
-											{filter.total > filter.filterList.length && (
-												<div
-													className='right'
-													onClick={() => toggleIndexList(filter)}
-												>
-													全部
-													<Icon
-														name='more'
-														className='right-svg'
-													/>
-												</div>
-											)}
-										</section>
-										<ul className='content'>
-											{filter.filterList.map((f) => {
-												return (
-													<SelectCard
-														key={f.id}
-														filter={f}
-														onClick={selectFilter}
-														isSelected={selectedFilters.some(
-															(filter) => f.name === filter.name
-														)}
-													/>
-												)
-											})}
-										</ul>
-									</li>
-								)
-							})}
-						</ul>
-						<div className='bottom-bar'>
-							<button
-								className='bottom-bar-btn border-btn'
-								onClick={resetSelectedFilters}
-							>
-								重置
-							</button>
-							<button className='bottom-bar-btn solid-btn'>
-								确定
-								<span className='counts'>(5969 件商品)</span>
-							</button>
-						</div>
-
-						<FilterIndexList
-							visible={indexListVisible}
-							close={() => setIndexListVisible(false)}
-							list={allFilterList[currentAllFiltersType.key]?.filterList}
-							filterType={currentAllFiltersType}
-							confirm={confirmFilterIndexList}
-							selectedList={selectedFilters.filter(
-								(f) => f.parentKey === currentAllFiltersType.key
-							)}
-						/>
-					</PopupBoard>
-				</Popup>
+					// FilterPopup's props
+					list={searchFilter}
+					filter={filter}
+					close={() => setVisible(false)}
+					confirm={setFilter}
+				/>
 			</FilterBarWrapper>
 		)
 	}
@@ -471,72 +304,6 @@ const FilterBarBoard = styled.ul`
 			width: var(--font-size-xl);
 			height: var(--font-size-xl);
 			color: var(--color-main);
-		}
-	}
-`
-
-const PopupBoard = styled.div`
-	width: 100%;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	position: relative;
-
-	ul.search-filters {
-		flex: 1 1 auto;
-		overflow: auto;
-		padding-bottom: 10px;
-		li.filter {
-			margin: 20px 10px 0 10px;
-			.title {
-				display: flex;
-				justify-content: space-between;
-				font-size: var(--font-size-xm);
-				margin-bottom: 10px;
-				.right {
-					display: flex;
-					color: var(--color-font-grey);
-					&-svg {
-						color: var(--color-font-grey);
-						width: var(--font-size-m);
-						height: var(--font-size-m);
-					}
-				}
-			}
-			.content {
-				display: grid;
-				grid-template-columns: repeat(3, 1fr);
-				grid-gap: 10px;
-			}
-		}
-	}
-
-	.bottom-bar {
-		width: 100%;
-		background: var(--color-background);
-		display: flex;
-		justify-content: space-around;
-		padding: 10px;
-		box-shadow: var(--shadow);
-		&-btn {
-			width: 48%;
-			border-radius: 20px;
-			font-size: var(--font-size-xm);
-			padding: 10px 5px;
-			font-weight: 400;
-			border: none;
-			.counts {
-				font-size: var(--font-size-s);
-			}
-			&.border-btn {
-				background: var(--color-background);
-				color: var(--color-main-4);
-				border: 1px solid var(--color-main-4);
-			}
-			&.solid-btn {
-				color: var(--color-background);
-				background: var(--color-main-4);
-			}
 		}
 	}
 `

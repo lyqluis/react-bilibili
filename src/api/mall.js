@@ -31,18 +31,28 @@ export const getProducts = () => {
   }).catch((err) => console.log("error", err))
 }
 
-// todo
-export const getFilterAllFilters = (filterType = 1, termQueries = [
-  { field: "category", values: ["1_107"] },
-]) => {
+export const getFilterAllFilters = ({
+  scene = "figure",
+  keyword = '',
+  filterType = 1,
+  termQueries = []
+}) => {
   return axios({
     method: 'get',
     url: '/mall/category/allfilter',
     params: {
       filterType,
-      keyword: "",
-      scene: "figure",
+      keyword,
+      scene,
       termQueries: JSON.stringify(termQueries),
     }
+  }).catch((err) => console.log("error", err))
+}
+
+export const getFilteredProductCount = (data) => {
+  return axios({
+    method: 'post',
+    url: '/mall/category/filtered/count',
+    data,
   }).catch((err) => console.log("error", err))
 }

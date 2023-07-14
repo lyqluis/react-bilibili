@@ -8,6 +8,8 @@
 
 #### 方案2: 组件之间传递属性
 
+![](./filter-structure.png)
+
 ##### 从外侧卡片对内侧列表选项通信
 
 当点击切换外层组件 `<FilterBar>` 的子组件 `<SelectCard>` 的选中状态，需要将该状态向同级子组件 `<FilterIndexList>` 的子组件 `ListItem` 传递
