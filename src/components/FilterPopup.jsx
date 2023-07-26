@@ -6,7 +6,7 @@ import Icon from "./Icon"
 import FilterIndexList from "./FilterIndexList"
 import { useState, useEffect } from "react"
 import { getFilterAllFilters, getFilteredProductCount } from "../api/mall"
-import { formatIndexList, formateFilter } from "../utils/global"
+import { formatIndexList, formateFilter } from "../utils/mallHelper"
 import { useDispatch, useSelector } from "react-redux"
 import { selectMallState, setAllFilterList } from "../store/mallSlice"
 
@@ -111,7 +111,7 @@ const FilterPopup = ({
 	}
 
 	const handleConfirm = () => {
-    close()
+		close()
 		confirm({ ...filter, ...countFilter })
 	}
 

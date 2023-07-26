@@ -1,9 +1,9 @@
 import PageLayout from "../layout/PageLayout"
 import styled from "styled-components"
-import { useLocation } from "react-router-dom"
+import { useLocation, useSearchParams, useNavigate } from "react-router-dom"
 import { useState, useEffect, useRef } from "react"
-import { getFilterObj, formateFilter } from "../utils/global"
-import useRequest from "../hooks/useRequest"
+import { getFilterObj, formateFilter } from "../utils/mallHelper"
+import { transObjToQuery } from "../utils/global"
 import { getProducts } from "../api/mall"
 import WaterFall from "../components/WaterFall"
 import { useDispatch, useSelector } from "react-redux"
@@ -13,7 +13,9 @@ import {
 	setProductsList,
 } from "../store/mallSlice"
 import Product from "../components/Porduct"
-import FilterBar from "./FilterBar"
+import FilterBar from "../components/FilterBar"
+import { InfiniteScroll } from "antd-mobile"
+import Header from "../components/Header"
 
 const defaultFilter = {
 	keyword: "",
@@ -22,93 +24,119 @@ const defaultFilter = {
 	priceCeil: "",
 	sortType: "totalrank", // 排序，totalrank | sale | price | pubtime, 综合｜销量｜价格｜新品
 	sortOrder: "", // 配合 sortType: 'price' 使用，desc | asc, 价格降序｜价格升序
-	pageIndex: 1, // 页数
 	userId: "",
 	state: "",
-	scene: "PC_list", // PC_list | figure
+	scene: "", // PC_list | figure | ''
 	termQueries: [], // required，获取商品数据必须的查询参数
 	rangeQueries: [],
-	pageSize: 32, // page size, default: 32
 	// from: "pc_show",
 	msource: "",
 }
 
-const urlFilter = {
-	noReffer: "true",
-	sortType: "totalrank",
-	sortOrder: "false",
-	isInStock: "false",
-	detailFilter: {
-		categories: {
-			6: '["0,2,3,5,6,7"]',
-		},
-		categoriesName: {
-			6: '["单品"]',
-		},
-		price: {
-			priceCeil: "",
-			priceFlow: "",
-		},
-	},
-	noTitleBar: "1",
-	page: "category_list",
-	from: "category_sb",
-	category: "1_107",
-	scene: "figure",
+const defaultPageState = {
+	pageIndex: 1, // 页数
+	pageSize: 32, // page size, default: 32
 }
 
 const ShopList = () => {
-	// todo listen to the url query to fetch products data
-	// change the UI to change filter, then change the query of url
-	// data changing rely on the url query
-	// dropdown + popup from right
 	const filterBarRef = useRef(null)
+	const inited = useRef(null)
 	const location = useLocation()
+	const navigate = useNavigate()
+	const [urlQuery, setUrlQuery] = useSearchParams()
 	const dispatch = useDispatch()
 	const [filter, setFilter] = useState(defaultFilter)
-	// todo combine filter with request
-	const { data, finished, request } = useRequest(getProducts, {
-		// manual: true,
-		deps: [filter],
-	})
+	const [pageState, setPageState] = useState(defaultPageState)
 	const pageInfo = useSelector(selectMallState("productsInfo"))
 	const products = useSelector(selectMallState("productsList"))
 
+	const [isRenderFinished, setIsRenderFinished] = useState(false)
+	const [hasMore, setHasMore] = useState(true)
+
+	const fetchProducts = async (extraFilter) => {
+		let res = await getProducts({ ...filter, ...pageState, ...extraFilter })
+		console.log("fetch products", res, pageState)
+		res = res.data
+		const page = res.pageIndex
+		const info = {}
+		for (const key in res) {
+			if (key === "list") {
+				if (page <= 1) {
+					dispatch(setProductsList(res[key]))
+				} else {
+					dispatch(setProductsList([...products, ...res[key]]))
+				}
+			} else {
+				info[key] = res[key]
+			}
+		}
+		dispatch(setProductsInfo(info))
+		setHasMore(info.hasNextPage)
+		if (info.hasNextPage) {
+			setPageState((prev) => {
+				return {
+					...prev,
+					pageIndex: res.pageIndex ? res.pageIndex + 1 : prev.pageIndex + 1,
+				}
+			})
+		}
+	}
+	const loadMore = async () => {
+		if (inited.current) {
+			await fetchProducts()
+		}
+	}
+
 	useEffect(() => {
-		const urlFilter = getFilterObj(location)
-		console.log("filter from url", urlFilter)
-		const filter = formateFilter(urlFilter, defaultFilter)
-		console.log("filter", filter)
-		setFilter(filter)
+		// console.log("location", location)
+		// init
+		if (!inited.current) {
+			const urlFilter = getFilterObj(location)
+			const filter = formateFilter(urlFilter, defaultFilter)
+			console.log("filter from url", urlFilter, "to filter", filter)
+			setFilter(filter)
+		}
 	}, [location])
 
 	useEffect(() => {
-		if (finished) {
-			const res = data.data
-			const info = {}
-			for (const key in res) {
-				if (key === "list") {
-					dispatch(setProductsList(res[key]))
-				} else {
-					info[key] = res[key]
-				}
+		console.log("filter", filter)
+		// skip filter inited with defaultFilter,
+		// then fetch data by loadmore
+		if (inited.current) {
+			const encodedFilter = transObjToQuery(filter)
+			console.log("change url", encodedFilter)
+			setUrlQuery(encodedFilter)
+			// reset data
+			if (filter.termQueries.length) {
+				dispatch(setProductsList([]))
+				// dispatch(setProductsInfo({}))
+				setPageState(defaultPageState)
 			}
-			dispatch(setProductsInfo(info))
+		} else if (filter.termQueries.length) {
+			inited.current = true
 		}
-	}, [data, finished])
-
-	useEffect(() => {
-		console.log(filter)
-		// todo reset product list
-		dispatch(setProductsList([]))
 	}, [filter])
+
+	// reset data when component unmounted
+	useEffect(() => {
+		return () => {
+			dispatch(setProductsList([]))
+			dispatch(setProductsInfo({}))
+		}
+	}, [])
 
 	return (
 		<PageLayout
-			header={"header"}
+			header={
+				<Header
+					title={pageInfo?.pageTitle ?? ""}
+					onClickLeft={() => navigate(-1)}
+				/>
+			}
 			stickyEl={filterBarRef}
 		>
 			<FilterBar
+				style={{ marginBottom: "10px" }}
 				ref={filterBarRef}
 				filter={filter}
 				setFilter={setFilter}
@@ -117,7 +145,15 @@ const ShopList = () => {
 
 			{/* <TstWrapper> */}
 			{/* // todo margin top */}
-			<WaterFall>
+			<WaterFall
+				onRender={() => setIsRenderFinished(false)}
+				onRenderFinished={() => {
+					setIsRenderFinished(true)
+					if (pageInfo.hasNextPage) {
+						setHasMore(true)
+					}
+				}}
+			>
 				{products.map((item) => {
 					return (
 						<Product
@@ -128,7 +164,13 @@ const ShopList = () => {
 					)
 				})}
 			</WaterFall>
-			{/* </TstWrapper> */}
+
+			{isRenderFinished && (
+				<InfiniteScroll
+					loadMore={loadMore}
+					hasMore={hasMore}
+				/>
+			)}
 		</PageLayout>
 	)
 }

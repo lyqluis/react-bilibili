@@ -1,6 +1,11 @@
 import { useState, useEffect, useCallback } from "react"
 
-const useRequest = (fetchFn, options) => {
+const useRequest = (fetchFn, options = {
+  manual: false,
+  ready: true,
+  pollingInterval: 0,
+  deps: [],
+}) => {
   const [loading, setLoading] = useState(false)
   const [finished, setFinished] = useState(false)
   const [data, setData] = useState(null)
@@ -9,7 +14,7 @@ const useRequest = (fetchFn, options) => {
   const {
     manual = false,
     // initialData = null,
-    ready= true,
+    ready = true,
     pollingInterval = 0,
     deps = []
   } = options

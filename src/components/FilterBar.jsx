@@ -1,26 +1,8 @@
 import { Dropdown } from "antd-mobile"
 import styled from "styled-components"
 import { useState, useRef, forwardRef } from "react"
-import Icon from "../components/Icon"
-import FilterPopup from "../components/FilterPopup"
-
-const defaultFilter = {
-	keyword: "",
-	filters: {},
-	priceFlow: "",
-	priceCeil: "",
-	sortType: "totalrank", // 排序，totalrank | sale | price | pubtime, 综合｜销量｜价格｜新品
-	sortOrder: "", // 配合 sortType: 'price' 使用，desc | asc, 价格降序｜价格升序
-	pageIndex: 1, // 页数
-	userId: "",
-	state: "",
-	scene: "figure", // PC_list | figure
-	termQueries: [], // required，获取商品数据必须的查询参数
-	rangeQueries: [],
-	pageSize: 32, // page size, default: 32
-	// from: "pc_show",
-	msource: "",
-}
+import Icon from "./Icon"
+import FilterPopup from "./FilterPopup"
 
 const SORT_TYPES = [
 	{ name: "totalrank", title: "综合" },
@@ -36,7 +18,7 @@ const SINGLE_TYPES = [
 ]
 
 const FilterBar = forwardRef(
-	({ filter, setFilter, searchFilter = [] }, ref) => {
+	({ filter, setFilter, searchFilter = [], style }, ref) => {
 		const [visible, setVisible] = useState(false)
 		const [sortType1, setSortType1] = useState(SORT_TYPES[0])
 		const [singleState, setSingleState] = useState(SINGLE_TYPES[0])
@@ -55,13 +37,14 @@ const FilterBar = forwardRef(
 		return (
 			<FilterBarWrapper
 				ref={ref}
+				style={style}
 				className='line-bottom-1px'
 			>
 				{/* sortType */}
 				<div
 					className={`sorter ${
-						SORT_TYPES.findIndex((s) => s.name === filter.sortType) === 0 ||
-						SORT_TYPES.findIndex((s) => s.name === filter.sortType) === 1
+						SORT_TYPES.findIndex((s) => s.name === filter?.sortType) === 0 ||
+						SORT_TYPES.findIndex((s) => s.name === filter?.sortType) === 1
 							? "active"
 							: ""
 					}`}
@@ -108,7 +91,7 @@ const FilterBar = forwardRef(
 				</div>
 				{/* pubtime */}
 				<div
-					className={`sorter ${filter.sortType === "pubtime" ? "active" : ""}`}
+					className={`sorter ${filter?.sortType === "pubtime" ? "active" : ""}`}
 					onClick={() => {
 						setFilter({ ...filter, sortType: "pubtime", sortOrder: "" })
 						sortTypeRef.current.close()
@@ -120,7 +103,7 @@ const FilterBar = forwardRef(
 				</div>
 				{/* price */}
 				<div
-					className={`sorter ${filter.sortType === "price" ? "active" : ""}`}
+					className={`sorter ${filter?.sortType === "price" ? "active" : ""}`}
 					onClick={handlePriceSort}
 				>
 					<div className='sorter-item'>
@@ -129,13 +112,13 @@ const FilterBar = forwardRef(
 							<Icon
 								name='up_fill'
 								className={`price-svg ${
-									filter.sortOrder === "asc" ? "active" : ""
+									filter?.sortOrder === "asc" ? "active" : ""
 								}`}
 							/>
 							<Icon
 								name='down_fill'
 								className={`price-svg ${
-									filter.sortOrder === "desc" ? "active" : ""
+									filter?.sortOrder === "desc" ? "active" : ""
 								}`}
 							/>
 						</div>
@@ -171,7 +154,7 @@ const FilterBar = forwardRef(
 												setFilter({
 													...filter,
 													detailFilter: {
-														...filter.detailFilter,
+														...filter?.detailFilter,
 														categories: { 6: val },
 													},
 												})

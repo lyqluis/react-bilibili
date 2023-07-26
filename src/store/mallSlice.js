@@ -5,6 +5,7 @@ const initialState = {
   productsInfo: {},
   productsList: [],
   allFilterList: {},
+  allCategories: [],
 }
 
 const mallSlice = createSlice({
@@ -19,6 +20,9 @@ const mallSlice = createSlice({
     },
     setAllFilterList: (state, action) => {
       state.allFilterList = action.payload
+    },
+    setAllCategories: (state, action) => {
+      state.allCategories = action.payload
     },
     // setCategoryList: (state, action) => {
     //   state.kindList = action.payload
@@ -59,6 +63,7 @@ export const {
   setIndexProducts,
   resetMallState,
   setAllFilterList,
+  setAllCategories,
 } = mallSlice.actions
 
 export default mallSlice.reducer

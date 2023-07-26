@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import Icon from "../components/Icon"
 import PageLayout from "../layout/PageLayout"
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -10,53 +9,7 @@ import Card from "../components/Card"
 import { getFavContent } from "../api/user"
 import { px2vw } from "../utils/style"
 import { PAGE_SIZE } from "../utils/global"
-
-const Header = ({ left, right, title }) => {
-	const navigate = useNavigate()
-	return (
-		<HeaderWrapper className='line-bottom-1px'>
-			<div className='header-left'>
-				{left ?? (
-					<Icon
-						name='back'
-						onClick={() => navigate(-1)}
-					/>
-				)}
-			</div>
-			<div className='header-center'>{title}</div>
-			<div className='header-right'>{right}</div>
-		</HeaderWrapper>
-	)
-}
-
-const HeaderWrapper = styled.header`
-	display: flex;
-	align-items: center;
-	position: relative;
-	height: 100%;
-
-	.header-left,
-	.header-right {
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		display: flex;
-		align-items: center;
-		padding: 0 10px;
-	}
-
-	.header-left {
-		left: 0;
-	}
-	.header-right {
-		right: 0;
-	}
-
-	.header-center {
-		margin: 0 auto;
-		max-width: 60%;
-	}
-`
+import Header from "../components/Header"
 
 const ListPage = () => {
 	const [loading, setLoading] = useState(true)
@@ -96,7 +49,14 @@ const ListPage = () => {
 	if (collection) {
 		return (
 			<Wrapper>
-				<PageLayout header={<Header title={collection.title} />}>
+				<PageLayout
+					header={
+						<Header
+							title={collection.title}
+							onClickLeft={() => navigate(-1)}
+						/>
+					}
+				>
 					<div className='video-list'>
 						{collection?.content?.medias.map((item) => {
 							return (

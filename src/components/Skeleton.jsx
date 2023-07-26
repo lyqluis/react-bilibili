@@ -2,6 +2,7 @@ import { Skeleton } from "antd-mobile"
 import styled from "styled-components"
 import { px2vw } from "../utils/style"
 
+// video list skeleton
 export const ListCardSkeleton = ({ key }) => {
 	return (
 		<Wrapper key={key}>
@@ -77,6 +78,7 @@ const Wrapper = styled.div`
 	}
 `
 
+// video card skeleton
 export const CardSkeleton = () => {
 	return (
 		<CardWrapper>
@@ -144,4 +146,29 @@ const CardWrapper = styled.div`
 
 export const CardSkeletonList = (n) => {
 	return new Array(n).fill(null).map((_, i) => <CardSkeleton key={i} />)
+}
+
+// Shop page's tabs loading skeleton
+export const ShopTabImgSkeleton = () => (
+	<Skeleton
+		animated
+		className='tab-img-skeleton'
+	/>
+)
+
+const ShopTabSkeleton = () => {
+	return (
+		<p className='tab'>
+			<ShopTabImgSkeleton />
+			<Skeleton.Title
+				lineCount={1}
+				animated
+				className='tab-title-skeleton'
+			/>
+		</p>
+	)
+}
+
+export const ShopTabSkeletonList = (n) => {
+	return new Array(n).fill(null).map((_, i) => <ShopTabSkeleton key={i} />)
 }

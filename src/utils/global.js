@@ -1,7 +1,6 @@
 export const round10k = num =>
   num > 9999 ? (num / 10000).toFixed(1) + '万' : num
 
-
 export const deduplication = (list1, list2, key) => {
   let isDuplicated, start = 0, l2 = list2.slice()
   for (let i = l2.length - 1; i >= 0; i--) {
@@ -87,63 +86,29 @@ export const isLongPic = pic => {
 
 const QUERY_EXP = /\?([\w_=&#%]*)/
 export const getQueryString = (url) => {
-  const res = url.match(QUERY_EXP)
-  return res[1]
+  return url.match(QUERY_EXP)[1]
 }
 
-export const getFilterObj = location => {
-  const hash = location.hash.match(/#([\w_=&%]*)/)?.[1]
-  const decodedHash = decodeURIComponent(decodeURIComponent(hash))
-  const query = location.search.match(/\?([\w_=&]*)/)[1]
-  const filterArr = [...decodedHash.split("&"), ...query.split("&")]
-  const filter = {}
-  filterArr.map((val) => {
-    const res = val.split("=")
-    filter[res[0]] = res[0] === "detailFilter" ? JSON.parse(res[1]) : res[1]
-  })
-  return filter
-}
-
-export const formatIndexList = data => {
-  const res = { ...data }
-  const list = data.filterList
-  const newList = []
-  list.forEach((item) => {
-    newList.push(...Object.entries(item))
-  })
-  res.filterList = newList
-  console.log("fetch all filter", newList)
-  return res
-}
-
-export const formateFilter = (rawFilter, defaultFilter) => {
-  const res = Object.assign({}, defaultFilter)
-  for (const key in res) {
-    if (rawFilter[key]) {
-      res[key] = rawFilter[key]
+export const deepClone = (target) => {
+  const res = Array.isArray(target) ? [] : {}
+  for (const key in target) {
+    const val = target[key]
+    if (typeof val === 'object') {
+      res[key] = deepClone(val)
+    } else {
+      res[key] = val
     }
   }
-  // category
-  rawFilter.category &&
-    res.termQueries.push({
-      field: 'category',
-      values: [rawFilter.category]
-    })
-  // detailfilter
-  if (rawFilter.detailFilter) {
-    const detailFilter = rawFilter.detailFilter
-    const categories = Object.entries(detailFilter.categories)
-    res.termQueries.push(...categories.map(([key, val]) => {
-      res.filters[key] = val
-      return {
-        field: key,
-        values: val
-      }
-    }))
-    const price = detailFilter.price
-    res.priceCeil = price.priceCeil
-    res.priceFlow = price.priceFlow
-  }
-  // todo rangeQueries
   return res
+}
+
+export const transObjToQuery = object => {
+  const arr = Object.entries(object)
+  const queryArr = arr.map(([key, value]) => {
+    if (value !== null && typeof value === 'object') {
+      value = JSON.stringify(value)
+    }
+    return `${key}=${value}`
+  })
+  return encodeURIComponent(queryArr.join('&'))
 }

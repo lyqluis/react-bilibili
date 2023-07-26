@@ -21,6 +21,7 @@ const MustSee = lazy(() => import("@/pages/MustSee"))
 const Login = lazy(() => import("@/pages/Login"))
 const ListPage = lazy(() => import("@/pages/ListPage"))
 const ShopList = lazy(() => import("@/pages/ShopList"))
+const ShopAllCategory = lazy(() => import("@/pages/ShopAllCategory"))
 
 // page laod
 const lazyload = (Component) => (props) =>
@@ -66,6 +67,7 @@ const routes = [
 			{ path: "search", Component: lazyload(Search) },
 			{ path: "shop", Component: lazyload(Shop) },
 			{ path: "shop/list", Component: lazyload(ShopList) },
+			{ path: "shop/allcategory", Component: lazyload(ShopAllCategory) },
 			{
 				path: "user/:userId?/:tabName?",
 				Component: checkAuth(lazyload(User)),

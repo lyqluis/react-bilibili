@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import { getProducts, getMallIndex, getMallIndexProducts } from "../api/mall"
-import { InfiniteScroll } from "antd-mobile"
+import { getMallIndex, getMallIndexProducts } from "../api/mall"
+import { Image, InfiniteScroll } from "antd-mobile"
 import { SearchBar } from "antd-mobile"
 import { useDispatch, useSelector } from "react-redux"
 import {
@@ -16,6 +16,9 @@ import WaterFall from "../components/WaterFall"
 import Product from "../components/Porduct"
 import { getQueryString, isDef } from "../utils/global"
 import { useNavigate } from "react-router-dom"
+import { ShopTabImgSkeleton, ShopTabSkeletonList } from "../components/Skeleton"
+
+const tabsSkeletonList = ShopTabSkeletonList(6)
 
 export default function Shop() {
 	const indexData = useSelector(selectMallState("index"))
@@ -58,32 +61,43 @@ export default function Shop() {
 				<SearchBar />
 			</h1>
 
-			{/* // todo link to the product page */}
-			{/* // change the query of url */}
+			{/* // todo change the query of url */}
 			<ul className='tabs'>
-				{/* // todo loading */}
-				{indexData &&
-					indexData.tabs?.map((tab) => {
-						return (
-							<p
-								key={tab.name}
-								className='tab'
-								onClick={() => {
-									const query = getQueryString(tab.jumpUrl)
-									navigate(`/shop/list?${query}`)
-								}}
-							>
-								{tab.imageUrl && (
-									<img
-										src={tab.imageUrl}
-										alt=''
-									/>
-								)}
-								<span>{tab.name}</span>
-							</p>
-						)
-					})}
-				<p className='tab tab-more'>
+				{indexData?.tabs?.length > 0
+					? indexData.tabs
+							?.filter((tab) => /category=/.test(tab.jumpUrl))
+							.map((tab) => {
+								return (
+									<p
+										key={tab.name}
+										className='tab'
+										onClick={() => {
+											const query = getQueryString(tab.jumpUrl)
+											console.log(query)
+											if (/category=/.test(query)) {
+												navigate(`/shop/list?${query}`)
+											}
+											// todo no category page
+										}}
+									>
+										{tab.imageUrl && (
+											<Image
+												lazy
+												fit='cover'
+												width='100%'
+												src={tab.imageUrl}
+												placeholder={<ShopTabImgSkeleton />}
+											/>
+										)}
+										<span>{tab.name}</span>
+									</p>
+								)
+							})
+					: tabsSkeletonList.map((skeleton) => skeleton)}
+				<p
+					className='tab tab-more'
+					onClick={() => navigate("/shop/allcategory")}
+				>
 					<Icon
 						name='more'
 						className='tab-more-svg'
@@ -123,7 +137,7 @@ export default function Shop() {
 const Wrapper = styled.div`
 	.tabs {
 		margin: 10px 0;
-		padding: 10px 0;
+		padding: 0 5px;
 		display: flex;
 		overflow: auto;
 		.tab {
@@ -137,7 +151,6 @@ const Wrapper = styled.div`
 			img {
 				width: 100%;
 			}
-
 			&-more {
 				width: auto;
 				justify-content: flex-end;
@@ -145,7 +158,25 @@ const Wrapper = styled.div`
 					height: 50px;
 				}
 			}
+
+			.tab-img-skeleton {
+				width: 100%;
+				height: 50px;
+				border-radius: 50%;
+			}
+			.tab-title-skeleton {
+				margin: 0;
+				margin-top: 2px;
+				width: 100%;
+				height: var(--font-size-s);
+			}
 		}
+
+		/* scrollbar */
+		::-webkit-scrollbar {
+			display: none;
+		}
+		scrollbar-width: none;
 	}
 
 	.products {

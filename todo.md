@@ -25,22 +25,23 @@
   - [ ] logout button
 - [ ] shopping page
   - [ ] search
-  - [ ] filter bar
+  - [x] filter bar
     - [x] filter popup selector
-    - [ ] filter page selector
-      - [ ] price input box
+    - [x] filter page selector
+      - [x] price input box
       - [x] filter index list
-        - [ ] bug: 外层选中后，打开内层选择其他，回到外层，原来选定的样式消失
+        - [x] bug: 外层选中后，打开内层选择其他，回到外层，原来选定的样式消失
   - [x] tabs
   - [x] waterfall
     - [x] waterfall work with InfiniteScroll (useLayoutEffect)
+  - [x] products waterfall page
   - [ ] all kinds page
-  - [ ] products waterfall page
 - [ ] concat some store slice into popular slice
 - [ ] Bottom Menu, switch to 1st menu is too slow
 - [ ] init app to get login stat if the backend crapped, the process should be optimized
 - [ ] 节流优化
   - [ ] PageLayout 中的滚动监听
+  - [ ] ShopAllCategory 中的滚动监听（参考:https://mobile.ant.design/zh/components/side-bar 中使用 ahooks 的 useThrottleFn）
 
 ### bili-node-api
 

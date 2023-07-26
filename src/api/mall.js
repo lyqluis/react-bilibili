@@ -18,16 +18,15 @@ export const getMallIndexProducts = (pn = 2) => {
 export const getMallCategories = () => {
   return axios({
     method: 'get',
-    url: '/mall/category',
+    url: '/mall/categories',
   }).catch(err => console.log('error', err))
 }
 
-export const getProducts = () => {
+export const getProducts = (filter) => {
   return axios({
-    method: 'get',
+    method: 'post',
     url: '/mall/products',
-    params: {
-    }
+    data: filter,
   }).catch((err) => console.log("error", err))
 }
 
