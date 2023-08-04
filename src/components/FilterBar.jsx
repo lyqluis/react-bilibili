@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { useState, useRef, forwardRef } from "react"
 import Icon from "./Icon"
 import FilterPopup from "./FilterPopup"
+import { isDef } from "../utils/global"
 
 const SORT_TYPES = [
 	{ name: "totalrank", title: "综合" },
@@ -178,14 +179,14 @@ const FilterBar = forwardRef(
 
 				<div className='filter-line line-left-1px'></div>
 				<div
-					className='sorter'
+					className={`sorter ${isDef(filter.filters) ? "active" : ""}`}
 					onClick={() => setVisible(true)}
 				>
 					<div className='sorter-item'>
 						<span className='sorter-item-title'>筛选</span>
 						<Icon
 							name='filter'
-							className='filter-svg'
+							className={`filter-svg ${isDef(filter.filters) ? "active" : ""}`}
 						/>
 					</div>
 				</div>
@@ -242,6 +243,9 @@ const FilterBarWrapper = styled.div`
 		.filter-svg {
 			width: var(--font-size-m);
 			height: var(--font-size-m);
+			&.active {
+				color: var(--color-main);
+			}
 		}
 
 		&.active {

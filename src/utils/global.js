@@ -49,7 +49,7 @@ export const formatDuration = duration => {
 
 export const isDef = val => {
   if (Array.isArray(val)) return !!val.length
-  if (typeof val === 'object') return !!Reflect.ownKeys(val).length
+  if (typeof val === 'object' && val !== null) return !!Reflect.ownKeys(val).length
   return val !== null && val !== undefined
 }
 

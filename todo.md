@@ -26,8 +26,8 @@
   - [x] 视频 tab
   - [ ] logout button
 - [ ] shopping page
-  - [ ] search
-    - [ ] mall search page & mall search result page
+  - [x] search
+    - mall search page & mall search result page
   - [x] filter bar
     - [x] filter popup selector
     - [x] filter page selector
@@ -45,6 +45,10 @@
 - [ ] 节流优化
   - [ ] PageLayout 中的滚动监听
   - [ ] ShopAllCategory 中的滚动监听（参考:https://mobile.ant.design/zh/components/side-bar 中使用 ahooks 的 useThrottleFn）
+- [ ] bug
+  - [x] waterfall 页面热更新后，页数自动增加
+  - [ ] 切换 component，图片会重新请求
+
 
 ### bili-node-api
 

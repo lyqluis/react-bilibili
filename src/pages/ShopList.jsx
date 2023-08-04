@@ -76,9 +76,7 @@ const ShopList = ({ isSearchResult }) => {
 	}
 
 	useEffect(() => {
-		// console.log("location", location)
 		// init
-		// todo
 		if (!inited.current || isSearchResult) {
 			const urlFilter = getFilterObj(location)
 			const filter = formateFilter(urlFilter, defaultFilter)
@@ -89,17 +87,24 @@ const ShopList = ({ isSearchResult }) => {
 
 	useEffect(() => {
 		console.log("filter", filter)
-		// skip filter inited with defaultFilter,
-		// then fetch data by loadmore
 		if (inited.current) {
-			const encodedFilter = transObjToQuery(filter)
-			console.log("change url", encodedFilter)
-			setUrlQuery(encodedFilter)
+			// skip filter inited with defaultFilter,
+			// then fetch data by loadmore
+			if (isSearchResult) {
+				// search result
+				setIsSearch(false)
+			} else {
+				const encodedFilter = transObjToQuery(filter)
+				console.log("change url", encodedFilter)
+				setUrlQuery(encodedFilter)
+			}
+
 			// reset data
 			if (filter.termQueries.length) {
 				dispatch(setProductsList([]))
-				// dispatch(setProductsInfo({}))
+				dispatch(setProductsInfo({}))
 				setPageState(defaultPageState)
+				setHasMore(true)
 			}
 		} else if (filter.termQueries.length) {
 			inited.current = true
@@ -111,6 +116,7 @@ const ShopList = ({ isSearchResult }) => {
 		return () => {
 			dispatch(setProductsList([]))
 			dispatch(setProductsInfo({}))
+			setPageState(defaultPageState)
 		}
 	}, [])
 
@@ -119,8 +125,6 @@ const ShopList = ({ isSearchResult }) => {
 			<ShopSearch
 				inputKeyword={filter.keyword}
 				onBack={() => setIsSearch(false)}
-				// filter={filter}
-				// onSearch={setFilter}
 			/>
 		)
 	}
@@ -139,12 +143,12 @@ const ShopList = ({ isSearchResult }) => {
 						<SearchBar
 							showCancelButton
 							// ref={searchRef}
-							value={filter.keyword}
 							placeholder='商品、品牌、IP名'
+							value={filter.keyword}
 							// onSearch={handleSearch}
 							// onChange={handleChange}
 							onFocus={() => setIsSearch(true)}
-							// onClear={() => searchRef.current?.focus()}
+							clearable={false}
 							// onCancel={handlCancel}
 						/>
 					</SearchBarWrapper>
@@ -153,6 +157,7 @@ const ShopList = ({ isSearchResult }) => {
 						title={pageInfo?.pageTitle ?? ""}
 						onClickLeft={() => navigate(-1)}
 						rightIcon='search'
+						onClickRight={() => setIsSearch(true)}
 					/>
 				)
 			}
@@ -170,9 +175,9 @@ const ShopList = ({ isSearchResult }) => {
 				onRender={() => setIsRenderFinished(false)}
 				onRenderFinished={() => {
 					setIsRenderFinished(true)
-					if (pageInfo.hasNextPage) {
-						setHasMore(true)
-					}
+					// if (pageInfo.hasNextPage) {
+					// 	setHasMore(true)
+					// }
 				}}
 			>
 				{products.map((item) => {

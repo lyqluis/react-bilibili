@@ -60,17 +60,13 @@ export default function Shop() {
 	if (isSearch) {
 		return (
 			<Wrapper>
-				<ShopSearch
-					// showWholePage={isSearch}
-					onBack={() => setIsSearch(false)}
-				/>
+				<ShopSearch onBack={() => setIsSearch(false)} />
 			</Wrapper>
 		)
 	}
 
 	return (
 		<Wrapper>
-			{/* <ShopSearch /> */}
 			<div className='search-wrapper'>
 				<SearchBar
 					showCancelButton
@@ -78,7 +74,6 @@ export default function Shop() {
 				/>
 			</div>
 
-			{/* // todo change the query of url */}
 			<ul className='tabs'>
 				{indexData?.tabs?.length > 0
 					? indexData.tabs

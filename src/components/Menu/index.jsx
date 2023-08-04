@@ -14,12 +14,13 @@ export default function Menu() {
 	const location = useLocation()
 
 	useEffect(() => {
+		const pathname = "/" + location.pathname.split("/")[1]
 		const newIndex = menu.findIndex((item) => {
 			if (location.pathname === "/login") {
 				return item.path === "/user"
 			}
 			if (item.path !== "/") {
-				return location.pathname.includes(item.path)
+				return pathname.includes(item.path)
 			}
 			return item.path === location.pathname
 		})
