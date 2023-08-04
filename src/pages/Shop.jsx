@@ -17,10 +17,13 @@ import Product from "../components/Porduct"
 import { getQueryString, isDef } from "../utils/global"
 import { useNavigate } from "react-router-dom"
 import { ShopTabImgSkeleton, ShopTabSkeletonList } from "../components/Skeleton"
+import ShopSearch from "../components/ShopSearch"
+import { px2vw } from "../utils/style"
 
 const tabsSkeletonList = ShopTabSkeletonList(6)
 
 export default function Shop() {
+	const [isSearch, setIsSearch] = useState(false)
 	const indexData = useSelector(selectMallState("index"))
 	const products = useSelector(selectMallIndexProducts)
 	const dispatch = useDispatch()
@@ -54,12 +57,26 @@ export default function Shop() {
 		}
 	}, [data, finished])
 
+	if (isSearch) {
+		return (
+			<Wrapper>
+				<ShopSearch
+					// showWholePage={isSearch}
+					onBack={() => setIsSearch(false)}
+				/>
+			</Wrapper>
+		)
+	}
+
 	return (
 		<Wrapper>
-			<h1>
-				shop search
-				<SearchBar />
-			</h1>
+			{/* <ShopSearch /> */}
+			<div className='search-wrapper'>
+				<SearchBar
+					showCancelButton
+					onFocus={() => setIsSearch(true)}
+				/>
+			</div>
 
 			{/* // todo change the query of url */}
 			<ul className='tabs'>
@@ -135,6 +152,14 @@ export default function Shop() {
 }
 
 const Wrapper = styled.div`
+	.search-wrapper {
+		background: var(--color-background);
+		padding: ${px2vw`10px`};
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
+
 	.tabs {
 		margin: 10px 0;
 		padding: 0 5px;

@@ -19,19 +19,26 @@ const Header = ({
 				className='header-left'
 				onClick={onClickLeft}
 			>
-				{left ?? (
-					<Icon
-						name={leftIcon}
-						className='svg'
-					/>
-				)}
+				{left ??
+					(leftIcon && (
+						<Icon
+							name={leftIcon}
+							className='svg'
+						/>
+					))}
 			</div>
 			<div className='header-center'>{center ?? title}</div>
 			<div
 				className='header-right'
 				onClick={onClickRight}
 			>
-				{right}
+				{right ??
+					(rightIcon && (
+						<Icon
+							name={rightIcon}
+							className='svg'
+						/>
+					))}
 			</div>
 		</Wrapper>
 	)
@@ -61,8 +68,8 @@ const Wrapper = styled.div`
 	}
 
 	.svg {
-		width: ${px2vw`30px`};
-		height: ${px2vw`30px`};
+		width: ${px2vw`20px`};
+		height: ${px2vw`20px`};
 	}
 
 	.header-center {

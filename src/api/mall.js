@@ -55,3 +55,11 @@ export const getFilteredProductCount = (data) => {
     data,
   }).catch((err) => console.log("error", err))
 }
+
+export const getMallSearchSuggestion = (keyword) => {
+  return axios({
+    method: 'get',
+    url: '/mall/search',
+    params: { keyword },
+  }).catch((err) => console.log("error", err))
+}

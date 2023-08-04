@@ -1,3 +1,5 @@
+- [x] Search page
+  - [ ] useRequest => useFetch
 - [x] weekly page
 - [x] MustSee page
 - [x] qr code component
@@ -25,6 +27,7 @@
   - [ ] logout button
 - [ ] shopping page
   - [ ] search
+    - [ ] mall search page & mall search result page
   - [x] filter bar
     - [x] filter popup selector
     - [x] filter page selector
@@ -35,7 +38,7 @@
   - [x] waterfall
     - [x] waterfall work with InfiniteScroll (useLayoutEffect)
   - [x] products waterfall page
-  - [ ] all kinds page
+  - [x] all kinds page
 - [ ] concat some store slice into popular slice
 - [ ] Bottom Menu, switch to 1st menu is too slow
 - [ ] init app to get login stat if the backend crapped, the process should be optimized

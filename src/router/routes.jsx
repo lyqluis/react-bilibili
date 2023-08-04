@@ -24,10 +24,13 @@ const ShopList = lazy(() => import("@/pages/ShopList"))
 const ShopAllCategory = lazy(() => import("@/pages/ShopAllCategory"))
 
 // page laod
-const lazyload = (Component) => (props) =>
+const lazyload = (Component, extraProps) => (props) =>
 	(
 		<Suspense fallback={<Loading />}>
-			<Component {...props} />
+			<Component
+				{...props}
+				{...extraProps}
+			/>
 		</Suspense>
 	)
 
@@ -68,6 +71,10 @@ const routes = [
 			{ path: "shop", Component: lazyload(Shop) },
 			{ path: "shop/list", Component: lazyload(ShopList) },
 			{ path: "shop/allcategory", Component: lazyload(ShopAllCategory) },
+			{
+				path: "shop/search_result",
+				Component: lazyload(ShopList, { isSearchResult: true }),
+			},
 			{
 				path: "user/:userId?/:tabName?",
 				Component: checkAuth(lazyload(User)),

@@ -1,5 +1,21 @@
 import { deepClone } from "./global"
 
+export const defaultFilter = {
+  keyword: "",
+  filters: {},
+  priceFlow: "",
+  priceCeil: "",
+  sortType: "totalrank", // 排序，totalrank | sale | price | pubtime, 综合｜销量｜价格｜新品
+  sortOrder: "", // 配合 sortType: 'price' 使用，desc | asc, 价格降序｜价格升序
+  userId: "",
+  state: "",
+  scene: "", // PC_list | figure | ''
+  termQueries: [], // required，获取商品数据必须的查询参数
+  rangeQueries: [],
+  // from: "pc_show",
+  msource: "",
+}
+
 export const getFilterObj = location => {
   const hash = location.hash.match(/#([\w_=&%]*)/)?.[1]
   const decodedHash = decodeURIComponent(decodeURIComponent(hash))

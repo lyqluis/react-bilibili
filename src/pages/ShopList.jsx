@@ -2,7 +2,7 @@ import PageLayout from "../layout/PageLayout"
 import styled from "styled-components"
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom"
 import { useState, useEffect, useRef } from "react"
-import { getFilterObj, formateFilter } from "../utils/mallHelper"
+import { getFilterObj, formateFilter, defaultFilter } from "../utils/mallHelper"
 import { transObjToQuery } from "../utils/global"
 import { getProducts } from "../api/mall"
 import WaterFall from "../components/WaterFall"
@@ -14,31 +14,17 @@ import {
 } from "../store/mallSlice"
 import Product from "../components/Porduct"
 import FilterBar from "../components/FilterBar"
-import { InfiniteScroll } from "antd-mobile"
+import { InfiniteScroll, SearchBar } from "antd-mobile"
 import Header from "../components/Header"
-
-const defaultFilter = {
-	keyword: "",
-	filters: {},
-	priceFlow: "",
-	priceCeil: "",
-	sortType: "totalrank", // 排序，totalrank | sale | price | pubtime, 综合｜销量｜价格｜新品
-	sortOrder: "", // 配合 sortType: 'price' 使用，desc | asc, 价格降序｜价格升序
-	userId: "",
-	state: "",
-	scene: "", // PC_list | figure | ''
-	termQueries: [], // required，获取商品数据必须的查询参数
-	rangeQueries: [],
-	// from: "pc_show",
-	msource: "",
-}
+import ShopSearch, { SearchBarWrapper } from "../components/ShopSearch"
+import Icon from "../components/Icon"
 
 const defaultPageState = {
 	pageIndex: 1, // 页数
 	pageSize: 32, // page size, default: 32
 }
 
-const ShopList = () => {
+const ShopList = ({ isSearchResult }) => {
 	const filterBarRef = useRef(null)
 	const inited = useRef(null)
 	const location = useLocation()
@@ -49,6 +35,8 @@ const ShopList = () => {
 	const [pageState, setPageState] = useState(defaultPageState)
 	const pageInfo = useSelector(selectMallState("productsInfo"))
 	const products = useSelector(selectMallState("productsList"))
+
+	const [isSearch, setIsSearch] = useState(false)
 
 	const [isRenderFinished, setIsRenderFinished] = useState(false)
 	const [hasMore, setHasMore] = useState(true)
@@ -90,7 +78,8 @@ const ShopList = () => {
 	useEffect(() => {
 		// console.log("location", location)
 		// init
-		if (!inited.current) {
+		// todo
+		if (!inited.current || isSearchResult) {
 			const urlFilter = getFilterObj(location)
 			const filter = formateFilter(urlFilter, defaultFilter)
 			console.log("filter from url", urlFilter, "to filter", filter)
@@ -125,13 +114,47 @@ const ShopList = () => {
 		}
 	}, [])
 
+	if (isSearch) {
+		return (
+			<ShopSearch
+				inputKeyword={filter.keyword}
+				onBack={() => setIsSearch(false)}
+				// filter={filter}
+				// onSearch={setFilter}
+			/>
+		)
+	}
+
 	return (
 		<PageLayout
 			header={
-				<Header
-					title={pageInfo?.pageTitle ?? ""}
-					onClickLeft={() => navigate(-1)}
-				/>
+				isSearchResult ? (
+					<SearchBarWrapper>
+						<Icon
+							name='back'
+							className='back-svg'
+							onClick={() => navigate(-1)}
+						/>
+
+						<SearchBar
+							showCancelButton
+							// ref={searchRef}
+							value={filter.keyword}
+							placeholder='商品、品牌、IP名'
+							// onSearch={handleSearch}
+							// onChange={handleChange}
+							onFocus={() => setIsSearch(true)}
+							// onClear={() => searchRef.current?.focus()}
+							// onCancel={handlCancel}
+						/>
+					</SearchBarWrapper>
+				) : (
+					<Header
+						title={pageInfo?.pageTitle ?? ""}
+						onClickLeft={() => navigate(-1)}
+						rightIcon='search'
+					/>
+				)
 			}
 			stickyEl={filterBarRef}
 		>
@@ -143,8 +166,6 @@ const ShopList = () => {
 				searchFilter={pageInfo.searchFilter}
 			/>
 
-			{/* <TstWrapper> */}
-			{/* // todo margin top */}
 			<WaterFall
 				onRender={() => setIsRenderFinished(false)}
 				onRenderFinished={() => {
@@ -174,10 +195,5 @@ const ShopList = () => {
 		</PageLayout>
 	)
 }
-
-const TstWrapper = styled.div`
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-`
 
 export default ShopList
