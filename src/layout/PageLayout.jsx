@@ -64,7 +64,7 @@ const Wrapper = styled.div`
 
 	.page-content {
 		padding-top: ${px2vw`45px`};
-
+		position: relative;
 		// adm-list no top border
 		.adm-list-body {
 			border-top: none;

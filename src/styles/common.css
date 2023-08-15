@@ -29,6 +29,20 @@
 	transform: scaleY(0.5);
 }
 
+.line-top-1px {
+	position: relative;
+}
+.line-top-1px:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	border-bottom: 1px solid var(--color-border);
+	transform: scaleY(0.5);
+}
+
 .line-left-1px {
 	position: relative;
 }

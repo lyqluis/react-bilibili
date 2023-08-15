@@ -13,7 +13,7 @@ import useRequest from "../hooks/useRequest"
 import styled from "styled-components"
 import Icon from "../components/Icon"
 import WaterFall from "../components/WaterFall"
-import Product from "../components/Porduct"
+import ProductCard from "../components/ProductCard"
 import { getQueryString, isDef } from "../utils/global"
 import { useNavigate } from "react-router-dom"
 import { ShopTabImgSkeleton, ShopTabSkeletonList } from "../components/Skeleton"
@@ -67,11 +67,18 @@ export default function Shop() {
 
 	return (
 		<Wrapper>
-			<div className='search-wrapper'>
+			<div className='index-header'>
+				<div className='left-logo'>会员购</div>
 				<SearchBar
 					showCancelButton
 					onFocus={() => setIsSearch(true)}
 				/>
+				<div className='right-logo'>
+					<Icon
+						name='cart'
+						className='svg'
+					/>
+				</div>
 			</div>
 
 			<ul className='tabs'>
@@ -80,7 +87,7 @@ export default function Shop() {
 							?.filter((tab) => /category=/.test(tab.jumpUrl))
 							.map((tab) => {
 								return (
-									<p
+									<div
 										key={tab.name}
 										className='tab'
 										onClick={() => {
@@ -97,12 +104,12 @@ export default function Shop() {
 												lazy
 												fit='cover'
 												width='100%'
-												src={tab.imageUrl}
+												src={`${tab.imageUrl}@1c.webp`}
 												placeholder={<ShopTabImgSkeleton />}
 											/>
 										)}
 										<span>{tab.name}</span>
-									</p>
+									</div>
 								)
 							})
 					: tabsSkeletonList.map((skeleton) => skeleton)}
@@ -127,7 +134,7 @@ export default function Shop() {
 			>
 				{products.map((item) => {
 					return (
-						<Product
+						<ProductCard
 							className='item'
 							key={item.id}
 							product={item}
@@ -147,12 +154,32 @@ export default function Shop() {
 }
 
 const Wrapper = styled.div`
-	.search-wrapper {
+	.index-header {
 		background: var(--color-background);
 		padding: ${px2vw`10px`};
 		position: sticky;
 		top: 0;
 		z-index: 10;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		.left-logo {
+			font-size: var(--font-size-l);
+			font-weight: 500;
+			color: var(--color-main);
+			margin-right: 10px;
+		}
+		.right-logo {
+			margin-left: 10px;
+			display: flex;
+			align-items: center;
+			.svg {
+				width: var(--font-size-xl);
+			}
+		}
+		.adm-search-bar {
+			flex: auto;
+		}
 	}
 
 	.tabs {

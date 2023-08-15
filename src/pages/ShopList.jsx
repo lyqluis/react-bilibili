@@ -1,5 +1,4 @@
 import PageLayout from "../layout/PageLayout"
-import styled from "styled-components"
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom"
 import { useState, useEffect, useRef } from "react"
 import { getFilterObj, formateFilter, defaultFilter } from "../utils/mallHelper"
@@ -12,7 +11,7 @@ import {
 	setProductsInfo,
 	setProductsList,
 } from "../store/mallSlice"
-import Product from "../components/Porduct"
+import ProductCard from "../components/ProductCard"
 import FilterBar from "../components/FilterBar"
 import { InfiniteScroll, SearchBar } from "antd-mobile"
 import Header from "../components/Header"
@@ -182,7 +181,7 @@ const ShopList = ({ isSearchResult }) => {
 			>
 				{products.map((item) => {
 					return (
-						<Product
+						<ProductCard
 							className='item'
 							key={item.itemsId}
 							product={item}

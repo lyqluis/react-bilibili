@@ -54,15 +54,14 @@ const Wrapper = styled.menu`
 	bottom: 0;
 	left: 0;
 	right: 0;
-	/* height: ${px2vw`50px`}; */
 	background: var(--color-background);
 	padding: ${px2vw`5px`};
 	display: flex;
 	justify-content: space-around;
 	box-shadow: var(--shadow);
+	z-index: 10;
 
 	.menu-item {
-		/* background: lightcoral; */
 		font-size: var(--font-size-xm);
 		margin: ${px2vw`5px`};
 		display: flex;

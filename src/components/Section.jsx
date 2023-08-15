@@ -15,11 +15,13 @@ export default function Section({
 			style={style}
 			className={className}
 		>
-			<div className='section-title'>
-				<span className='sction-title-left'>{leftTitle}</span>
-				<span className='sction-title-center'>{title}</span>
-				<span className='sction-title-right'>{rightTitle}</span>
-			</div>
+			{(leftTitle || title || rightTitle) && (
+				<div className='section-title'>
+					<span className='sction-title-left'>{leftTitle}</span>
+					<span className='sction-title-center'>{title}</span>
+					<span className='sction-title-right'>{rightTitle}</span>
+				</div>
+			)}
 			<div className={`section-content ${contentClass}`}>{children}</div>
 		</Wrapper>
 	)
@@ -42,7 +44,7 @@ const Wrapper = styled.section`
 			justify-self: end;
 		}
 	}
-	
+
 	.section-content {
 		font-weight: 300;
 		font-size: var(--font-size-xm);

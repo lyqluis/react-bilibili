@@ -63,7 +63,5 @@ const Wrapper = styled.div`
 	padding: 0 10px;
 	position: relative;
 	padding-bottom: calc(4.8vw * 2 + var(--font-size-xm));
-	/* display: grid;
-	align-items: center; */
 `
 export default WaterFall

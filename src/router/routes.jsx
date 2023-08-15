@@ -22,6 +22,8 @@ const Login = lazy(() => import("@/pages/Login"))
 const ListPage = lazy(() => import("@/pages/ListPage"))
 const ShopList = lazy(() => import("@/pages/ShopList"))
 const ShopAllCategory = lazy(() => import("@/pages/ShopAllCategory"))
+const Product = lazy(() => import("@/pages/Product"))
+const Cart = lazy(() => import("@/pages/Cart"))
 
 // page laod
 const lazyload = (Component, extraProps) => (props) =>
@@ -71,6 +73,8 @@ const routes = [
 			{ path: "shop", Component: lazyload(Shop) },
 			{ path: "shop/list", Component: lazyload(ShopList) },
 			{ path: "shop/allcategory", Component: lazyload(ShopAllCategory) },
+			{ path: "shop/product/:id", Component: lazyload(Product) },
+			{ path: "shop/cart", Component: lazyload(Cart) },
 			{
 				path: "shop/search_result",
 				Component: lazyload(ShopList, { isSearchResult: true }),

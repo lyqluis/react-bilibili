@@ -1,10 +1,10 @@
-import { useRef } from "react"
 import { Image } from "antd-mobile"
 import styled from "styled-components"
-import { useEffect } from "react"
 import Icon from "./Icon"
+import { logoSvg } from "../utils/mallHelper"
+import { useNavigate } from "react-router-dom"
 
-const NotProductImage = ({ item, size = "small", rank, isIp = false }) => {
+const NotProductImageCard = ({ item, size = "small", rank, isIp = false }) => {
 	const height = size === "big" ? 156.5 : 75.5
 	return (
 		<NotProductImageWrapper>
@@ -55,9 +55,7 @@ const NotProductImageWrapper = styled.div`
 `
 
 // ## 根据不同的 type 定高
-const Product = ({ product }) => {
-	const fragment = document.createDocumentFragment()
-
+const ProductCard = ({ product }) => {
 	let preTags, tags
 	if (product.type === "mallitems" || product.type === "") {
 		preTags = product.feedTag?.frontTag.slice() ?? []
@@ -66,17 +64,27 @@ const Product = ({ product }) => {
 		tags.sort((a, b) => b.priority - a.priority)
 	}
 
+	const navigate = useNavigate()
+	const handleClick = () => {
+		if (product.type === "mallitems") {
+			console.log(product)
+			navigate(`/shop/product/${product.itemsId}`)
+		}
+	}
+
 	return (
-		<Wrapper>
+		<Wrapper onClick={handleClick}>
 			{/* mallitems */}
 			{(product.type === "mallitems" || product.type === "") && (
 				<>
 					<Image
-						src={product.imageUrls?.[0] ?? product.itemsImg}
+						src={`${product.imageUrls?.[0] ?? product.itemsImg}@1c.webp`}
 						alt=''
+						lazy
 						width='100%'
 						height={172.5}
 						onLoad={() => {}}
+						placeholder={<img src={logoSvg} />}
 					/>
 					<section className='info'>
 						<p className='multi-ellipsis-line-2'>
@@ -175,17 +183,17 @@ const Product = ({ product }) => {
 						/>
 						热度值 {product.hot}
 					</p>
-					<NotProductImage
+					<NotProductImageCard
 						item={product.itemsList[0]}
 						rank={1}
 						size='big'
 					/>
 					<div className='second'>
-						<NotProductImage
+						<NotProductImageCard
 							item={product.itemsList[1]}
 							rank={2}
 						/>
-						<NotProductImage
+						<NotProductImageCard
 							item={product.itemsList[2]}
 							rank={3}
 						/>
@@ -199,7 +207,7 @@ const Product = ({ product }) => {
 					<div className='four-tiles-wrapper'>
 						{product.ipList.map((ip) => {
 							return (
-								<NotProductImage
+								<NotProductImageCard
 									key={ip.id}
 									item={ip}
 									isIp
@@ -360,4 +368,4 @@ const PhbWrapper = styled.div`
 	}
 `
 
-export default Product
+export default ProductCard

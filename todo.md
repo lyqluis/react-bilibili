@@ -39,6 +39,13 @@
     - [x] waterfall work with InfiniteScroll (useLayoutEffect)
   - [x] products waterfall page
   - [x] all kinds page
+  - [x] product page
+  - [x] index header
+    - [x] search bar
+    - [ ] user logo
+    - [x] cart logo
+      - [x] cart count info
+  - [x] cart page
 - [ ] concat some store slice into popular slice
 - [ ] Bottom Menu, switch to 1st menu is too slow
 - [ ] init app to get login stat if the backend crapped, the process should be optimized
@@ -48,7 +55,8 @@
 - [ ] bug
   - [x] waterfall 页面热更新后，页数自动增加
   - [ ] 切换 component，图片会重新请求
-
+    - [ ] 页面的所有数据都随着组件初始化重新请求了
+  - [ ] 切换页面，滚动条回滚置顶
 
 ### bili-node-api
 

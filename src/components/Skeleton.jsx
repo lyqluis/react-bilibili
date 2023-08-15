@@ -158,14 +158,14 @@ export const ShopTabImgSkeleton = () => (
 
 const ShopTabSkeleton = () => {
 	return (
-		<p className='tab'>
+		<div className='tab'>
 			<ShopTabImgSkeleton />
 			<Skeleton.Title
 				lineCount={1}
 				animated
 				className='tab-title-skeleton'
 			/>
-		</p>
+		</div>
 	)
 }
 
