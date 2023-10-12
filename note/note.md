@@ -2,11 +2,11 @@
 
 ![](./filter.gif)
 
-#### 方案1: 操纵数据
+#### 方案 1: 操纵数据
 
 将两个组件所用的数据进行同步，并在数据中添加 `selected: true/false` 的属性用来判断改选项是否被选中
 
-#### 方案2: 组件之间传递属性
+#### 方案 2: 组件之间传递属性
 
 ![](./filter-structure.png)
 
@@ -355,3 +355,12 @@ const SelectCard = ({ filter, onClick, isSelected }) => {
 ```
 
 ![](./filter-my.gif)
+
+### 图片 403
+因为图片服务器设置了防盗链
+
+>https://blog.csdn.net/xm1037782843/article/details/127378611
+>https://juejin.cn/post/6844903832040767496
+
+- 添加 `<meta name="referrer" content="no-referrer">`
+- 使用其他网址对图片进行缓存处理

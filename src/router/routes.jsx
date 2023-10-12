@@ -24,6 +24,8 @@ const ShopList = lazy(() => import("@/pages/ShopList"))
 const ShopAllCategory = lazy(() => import("@/pages/ShopAllCategory"))
 const Product = lazy(() => import("@/pages/Product"))
 const Cart = lazy(() => import("@/pages/Cart"))
+const Video = lazy(() => import("@/pages/Video"))
+// const Video = lazy(() => import("@/pages/Dash"))
 
 // page laod
 const lazyload = (Component, extraProps) => (props) =>
@@ -108,6 +110,7 @@ const routes = [
 				],
 			},
 			{ path: "login", Component: lazyload(Login) },
+			{ path: "video/:bvid", Component: lazyload(Video) },
 		],
 	},
 	{ path: "*", Component: Error },

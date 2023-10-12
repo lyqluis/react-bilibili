@@ -3,10 +3,16 @@ import { px2vw } from "../utils/style"
 import Icon from "./Icon"
 import { Image } from "antd-mobile"
 import { round10k } from "../utils/global"
+import { useNavigate } from "react-router-dom"
 
 export default function Card({ item, className }) {
+	const navigate = useNavigate()
+	const handleClick = () => {
+		navigate(`/video/${item.bvid}`)
+	}
+
 	return (
-		<Wrapper className={`video-list-item ${className}`}>
+		<Wrapper className={`video-list-item ${className}`} onClick={handleClick}>
 			<div className='video-list-item-pic'>
 				<Image
 					lazy

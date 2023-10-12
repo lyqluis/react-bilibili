@@ -46,6 +46,7 @@
     - [x] cart logo
       - [x] cart count info
   - [x] cart page
+- [ ] video page
 - [ ] concat some store slice into popular slice
 - [ ] Bottom Menu, switch to 1st menu is too slow
 - [ ] init app to get login stat if the backend crapped, the process should be optimized
@@ -66,4 +67,5 @@
   - [x] space 动态
   - [x] 发布的 videos
     - [x] Wbi 签名算法
-- [ ] 会员购 related api
+- [x] 会员购 related api
+- [ ] video api

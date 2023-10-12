@@ -142,3 +142,13 @@ export const transObjToQuery = (object) => {
 export const clamp = (num, min, max) => {
 	return Math.min(Math.max(num, min), max)
 }
+
+export const isCodecSupported = (codec) => {
+	// browser doesn't support the video codec
+	if (!("MediaSource" in window) || !MediaSource.isTypeSupported(codec)) {
+		console.error("Unsupported MIME type or codec: ", codec)
+		return false
+	}
+	// console.log("MIME type or codec supported:", codec)
+	return true
+}
