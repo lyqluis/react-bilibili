@@ -1,6 +1,6 @@
 import { getMediaUrl } from "../api/video"
 import { isCodecSupported } from "./global"
-import { SourceBuffer } from "./video2"
+import { SourceBuffer } from "./sourceBuffer"
 
 export default class Player {
 	constructor(videoEl, bvid) {
@@ -8,6 +8,7 @@ export default class Player {
 		this.bvid = bvid
 		this.url = getMediaUrl(this.bvid)
 		this.mediaSource = new MediaSource()
+		this.bufferTime = 2
 
 		this.mediaInfo = {
 			video: null,
@@ -52,15 +53,7 @@ export default class Player {
 	}
 
 	onSourceOpen() {
-		// todo combine audio & video
-		// addSource(
-		// 	videoInfo,
-		// 	mediaSource.current,
-		// 	video.current,
-		// 	url,
-		// 	0,
-		// 	BUFFER_TIME
-		// )
+		// TODO combine audio & video
 		console.log("on source open", this)
 		const videoBuffer = new SourceBuffer(
 			this.mediaInfo.video,
@@ -68,22 +61,42 @@ export default class Player {
 			this.el,
 			this.url
 		)
-		this.buffers.push(videoBuffer)
+		const audioBuffer = new SourceBuffer(
+			this.mediaInfo.audio,
+			this.mediaSource,
+			this.el,
+			this.url
+		)
+		this.buffers.push(videoBuffer, audioBuffer)
 
 		this.el.addEventListener("seeking", this.e.onSeeking)
 		this.el.addEventListener("timeupdate", this.e.onTimeUpdate)
 	}
 
-	onTimeUpdate({ target }) {
+	onTimeUpdate(e) {
+		console.log("timeupdate")
+		if (this.seeking) return
+		const { currentTime } = e.target
 		// todo throttle
-		const { currentTime } = target
+		this.buffers.map((sourceBuffer) => {
+			const { end } = sourceBuffer.getBufferRange()
+			if (end - currentTime < this.bufferTime) {
+				// laod more meadia's source buffer
+				sourceBuffer.loadMoreBuffer()
+			}
+		})
 	}
 
 	onSeeking(e) {
-		console.log("seeking", e)
+		console.log("seeking")
 		this.seeking = true
 		const { currentTime } = e.target
-		this.buffers.map((sourceBuffer) => sourceBuffer.changeBuffer(currentTime))
-		// todo if target is in the buffer
+		this.buffers.map((sourceBuffer) => {
+			const { start, end } = sourceBuffer.getBufferRange()
+			if (currentTime < start || currentTime >= end) {
+				sourceBuffer.changeBuffer(currentTime)
+			}
+		})
+		this.seeking = false
 	}
 }

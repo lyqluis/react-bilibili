@@ -16,10 +16,11 @@ export class SourceBuffer {
 		this.buffer = 10
 		this.seeking = false
 		this.queue = []
+		this.fetchQueue = []
 
 		this.onSourceBufferUpdateEnd()
 		this.init()
-		// this.onElSeeking()
+
 		this.el.addEventListener("error", () => {
 			console.error(
 				`Error ${this.el.error.code}; details: ${this.el.error.message}`
@@ -41,6 +42,7 @@ export class SourceBuffer {
 		console.log("remove", start, end)
 		this.sourceBuffer.remove(0, end)
 		this.queue = []
+		this.fetchQueue = []
 	}
 
 	changeBuffer(playTime) {
@@ -74,11 +76,12 @@ export class SourceBuffer {
 
 			// const isLastSegement = this.currentSegmentIndex >= sidx.length - 1
 			// // buffer
-			const { currentTime } = this.el
-			const playSegmentIndex = this.findSegmentIndex(currentTime)
-			if (this.currentSegmentIndex - playSegmentIndex <= 2) {
-				this.addSegment(this.currentSegmentIndex)
-			}
+			this.loadMoreBuffer()
+			// const { currentTime } = this.el
+			// const playSegmentIndex = this.findSegmentIndex(currentTime)
+			// if (this.currentSegmentIndex - playSegmentIndex <= 2) {
+			// 	this.addSegment(this.currentSegmentIndex)
+			// }
 
 			// if (!isLastSegement && this.currentSegmentIndex - currentSegmentIndex < 2) {
 			// 	await addNextMedia(mediaUrl, bufferSegmentIndex, startTime, sidx)
@@ -102,8 +105,13 @@ export class SourceBuffer {
 		if (isInit || isIdx) {
 			range = this.mediaInfo.segment_base[range]
 		} else if (typeof range === "number") {
+			if (range > this.sidx.length - 1) return
 			range = this.sidx[range].range
 		}
+
+		// exclude the repetition range
+		if (this.fetchQueue.includes(range)) return
+		this.fetchQueue.push(range)
 
 		const res = await axios({
 			url: this.mediaUrl,
@@ -118,6 +126,18 @@ export class SourceBuffer {
 			responseType: "arraybuffer", // MUST BE SURE response type is 'arraybuffer'
 		})
 		console.log("fetch buffer", range, typeof res, res)
+
+		// check data's validation
+		// in case currently in the buffer changing while last data just fetched
+		if (this.queue.length === 1 || this.queue.length > 2) {
+			const lastRange = this.queue.at(-1)
+			const lastEnd = parseInt(lastRange.match(/-(\d*)/)[1])
+			const newStart = parseInt(range.match(/(\d*)-/)[1])
+			if (lastEnd !== newStart - 1 && this.length >= 2) return
+		} else if (!this.queue.length) {
+			const newStart = parseInt(range.match(/(\d*)-/)[1])
+			if (newStart !== 0) return
+		}
 
 		// handle segement data
 		if (isInit || isIdx) {
@@ -140,6 +160,21 @@ export class SourceBuffer {
 		const currentSegmentIndex =
 			this.sidx.findIndex((segment) => segment.startTime > time) - 1
 		return clamp(currentSegmentIndex, 0, this.sidx.length - 1)
+	}
+
+	async loadMoreBuffer(n) {
+		const { currentTime } = this.el
+		const playSegmentIndex = this.findSegmentIndex(currentTime)
+		n = n ?? this.buffer
+		if (this.currentSegmentIndex - playSegmentIndex <= n) {
+			await this.addSegment(this.currentSegmentIndex)
+		}
+	}
+
+	getBufferRange() {
+		const start = this.sourceBuffer.buffered.start(0)
+		const end = this.sourceBuffer.buffered.end(0)
+		return { start, end }
 	}
 }
 

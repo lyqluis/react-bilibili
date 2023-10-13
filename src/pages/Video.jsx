@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import { getMediaUrl, getVideoInfo } from "../api/video"
 import { isCodecSupported } from "../utils/global"
 import { addSource } from "../utils/video"
-import { SourceBuffer } from "../utils/video2"
+import { SourceBuffer } from "../utils/sourceBuffer"
 import Player from "../utils/player"
 
 const Video = () => {
@@ -83,7 +83,7 @@ const Video = () => {
 		createVideo()
 
 		return () => {
-			mediaSource.current.removeEventListener("sourceopen", openSource)
+			mediaSource?.current?.removeEventListener("sourceopen", openSource)
 		}
 	}, [bvid])
 

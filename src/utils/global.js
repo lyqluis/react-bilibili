@@ -152,3 +152,6 @@ export const isCodecSupported = (codec) => {
 	// console.log("MIME type or codec supported:", codec)
 	return true
 }
+
+// TODO	
+export const throttle = (fn) => {}
