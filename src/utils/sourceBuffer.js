@@ -26,7 +26,6 @@ export class SourceBuffer {
 				`Error ${this.el.error.code}; details: ${this.el.error.message}`
 			)
 		})
-		// todo return
 	}
 
 	async init() {
@@ -54,7 +53,7 @@ export class SourceBuffer {
 
 	onSourceBufferUpdateEnd() {
 		this.sourceBuffer.addEventListener("updateend", async () => {
-			console.log("source buffer update end", this.sourceBuffer)
+			// console.log("source buffer update end", this.sourceBuffer)
 
 			// append initialization
 			if (this.cleared) {
@@ -125,7 +124,7 @@ export class SourceBuffer {
 			},
 			responseType: "arraybuffer", // MUST BE SURE response type is 'arraybuffer'
 		})
-		console.log("fetch buffer", range, typeof res, res)
+		// console.log("fetch buffer", range, typeof res, res)
 
 		// check data's validation
 		// in case currently in the buffer changing while last data just fetched
@@ -153,7 +152,7 @@ export class SourceBuffer {
 		// 往容器中添加请求到的数据，不会影响当下的视频播放
 		this.sourceBuffer.appendBuffer(res.data)
 		this.queue.push(range)
-		console.log(this.queue)
+		// console.log(this.queue)
 	}
 
 	findSegmentIndex(time) {

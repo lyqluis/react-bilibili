@@ -47,6 +47,7 @@
       - [x] cart count info
   - [x] cart page
 - [ ] video page
+  - [x] video player
 - [ ] concat some store slice into popular slice
 - [ ] Bottom Menu, switch to 1st menu is too slow
 - [ ] init app to get login stat if the backend crapped, the process should be optimized
@@ -69,3 +70,7 @@
     - [x] Wbi 签名算法
 - [x] 会员购 related api
 - [ ] video api
+  - [x] play url
+    - [ ] change play url from spidering the video page to direct url
+  - [ ] video detail
+  - [ ] recommand related video

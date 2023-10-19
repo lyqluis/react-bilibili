@@ -1,5 +1,5 @@
-export const round10k = (num) =>
-	num > 9999 ? (num / 10000).toFixed(1) + "万" : num
+export const round10k = (num, needSpace = false) =>
+	num > 9999 ? (num / 10000).toFixed(1) + `${needSpace ? " " : ''}万` : num
 
 export const deduplication = (list1, list2, key) => {
 	let isDuplicated,
