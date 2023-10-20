@@ -11,10 +11,12 @@ import { useNavigate } from "react-router-dom"
 import { Ellipsis, InfiniteScroll } from "antd-mobile"
 import Card from "../components/Card"
 
+// TODO some video play url got 403
 const Video = () => {
 	const navigate = useNavigate()
 	const { bvid } = useParams()
 	const video = useRef(null)
+	const pagePlayer = useRef(null)
 	const [videoInfo, setVideoInfo] = useState(null)
 	const hotTag = videoInfo?.View?.honor_reply?.honor?.find(
 		(tag) => tag.type === 4
@@ -34,15 +36,14 @@ const Video = () => {
 		}
 		// fetch the video's videoinfo & audioinfo
 		const createVideo = async () => {
-			const player = new Player(video.current, bvid)
+			const player = (pagePlayer.current = new Player(video.current, bvid))
 			const res = await getPlayInfo(bvid)
 			player.init(res)
 		}
 
+		if (pagePlayer.current) pagePlayer.current.destroy()
 		fetchvideoInfo()
 		createVideo()
-
-		// TODO when bvid changed, remove last player
 	}, [bvid])
 
 	return (

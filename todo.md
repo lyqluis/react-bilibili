@@ -72,5 +72,5 @@
 - [ ] video api
   - [x] play url
     - [ ] change play url from spidering the video page to direct url
-  - [ ] video detail
-  - [ ] recommand related video
+  - [x] video detail
+  - [ ] recommand related video(can load more depend on page size & page number)

@@ -6,8 +6,6 @@ export default class Player {
 	constructor(videoEl, bvid) {
 		this.el = videoEl
 		this.bvid = bvid
-		// this.url = getMediaUrl(this.bvid)
-		// this.mediaSource = new MediaSource()
 		this.bufferTime = 2
 
 		this.mediaInfo = {
@@ -33,7 +31,7 @@ export default class Player {
 	init({ videoInfo, audioInfo, playInfo }) {
 		this.url = getMediaUrl(this.bvid)
 		this.mediaSource = new MediaSource()
-		
+
 		// 视频格式和编码信息，主要为判断浏览器是否支持视频格式，但如果信息和视频不符可能会报错
 		const videoMimeCodec =
 			(videoInfo.mimeCodec = `${videoInfo.mimeType}; codecs="${videoInfo.codecs}"`)
@@ -55,10 +53,11 @@ export default class Player {
 		this.mediaSource.addEventListener("sourceopen", this.e.onSourceOpen)
 	}
 
-	// TODO
-	reset() {
-		// 解绑 el.src
-		// reset constructor
+	destroy() {
+		this.mediaSource.removeEventListener("sourceopen", this.e.onSourceOpen)
+		this.el.removeEventListener("seeking", this.e.onSeeking)
+		this.el.removeEventListener("timeupdate", this.e.onTimeUpdate)
+		this.el.src = null
 	}
 
 	onSourceOpen() {
