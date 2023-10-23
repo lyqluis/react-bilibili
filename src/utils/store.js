@@ -27,3 +27,6 @@ export const getLocalCart = () => getStore("mall_cart", [])
 
 export const setLocalIsLoggedIn = (val = false) => setStore("is_logged_in", val)
 export const getLocalIsLoggedIn = () => getStore("is_logged_in")
+
+export const setLocalRefreshToken = (val) => setStore("ac_time_value", val)
+export const getLocalRefreshToken = () => getStore("ac_time_value", "")

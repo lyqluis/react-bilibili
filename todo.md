@@ -63,6 +63,7 @@
 ### bili-node-api
 
 - [x] login related api
+  - [-] refresh cookie
 - [x] user related api
   - [x] favorite collections
   - [x] space 动态

@@ -1,11 +1,17 @@
 import { checkQRCode, getQRCodeImg, getQRCodeKey } from "../api/login"
 import { useState, useEffect, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { selectAuthState, setIsLoggedIn, setQrcode } from "../store/authSlice"
+import {
+	selectAuthState,
+	setIsLoggedIn,
+	setQrcode,
+	fetchLoginInfo,
+} from "../store/authSlice"
 import Icon from "./Icon"
 import styled, { keyframes } from "styled-components"
 import { px2vw } from "../utils/style"
 import { useNavigate } from "react-router-dom"
+import { setLocalRefreshToken } from "../utils/store"
 
 const QrCode = ({ from, to }) => {
 	const [qrcodeStatus, setQrcodeStatus] = useState(null)
@@ -73,8 +79,12 @@ const QrCode = ({ from, to }) => {
 
 	useEffect(() => {
 		if (isLoginSuccess) {
+			// store the refresh_token as ac_time_value in localstorage
+			setLocalRefreshToken(qrcodeStatus.refresh_token)
 			// set a logged in flag to the store / localstorage
 			dispatch(setIsLoggedIn(true))
+			// get auth inof
+			dispatch(fetchLoginInfo())
 
 			// Send them back to the page they tried to visit when they were
 			// redirected to the login page. Use { replace: true } so we don't create

@@ -1,14 +1,15 @@
-import axios from './index'
+import { getLocalRefreshToken } from "../utils/store"
+import axios from "./index"
 
 /**
  * @func: get qrcode key & url
  * @return {Obejct} res.data: { qurcode_key, url }
  */
 export const getQRCodeKey = () => {
-  return axios({
-    method: 'get',
-    url: '/qrcode/key',
-  }).catch((err) => console.log("error", err))
+	return axios({
+		method: "get",
+		url: "/qrcode/key",
+	}).catch((err) => console.log("error", err))
 }
 
 /**
@@ -16,12 +17,12 @@ export const getQRCodeKey = () => {
  * @param {String} url, qrcode's url from getQRCodeKey API
  * @return {Object} res.data. qrimg
  */
-export const getQRCodeImg = url => {
-  return axios({
-    method: 'post',
-    url: '/qrcode/create',
-    data: { url }
-  }).catch((err) => console.log("error", err))
+export const getQRCodeImg = (url) => {
+	return axios({
+		method: "post",
+		url: "/qrcode/create",
+		data: { url },
+	}).catch((err) => console.log("error", err))
 }
 
 /**
@@ -29,12 +30,12 @@ export const getQRCodeImg = url => {
  * @param {String} key
  * @return {*}
  */
-export const checkQRCode = key => {
-  return axios({
-    method: 'post',
-    url: '/qrcode/poll',
-    data: { key }
-  }).catch((err) => console.log("error", err))
+export const checkQRCode = (key) => {
+	return axios({
+		method: "post",
+		url: "/qrcode/poll",
+		data: { key },
+	}).catch((err) => console.log("error", err))
 }
 
 /**
@@ -42,10 +43,13 @@ export const checkQRCode = key => {
  * @return {Object} res.data
  */
 export const getLoginInfo = () => {
-  return axios({
-    method: 'get',
-    url: '/logininfo',
-  }).catch((err) => console.log("error", err))
+	return axios({
+		method: "get",
+		url: "/logininfo",
+		params: {
+			refresh_token: getLocalRefreshToken(),
+		},
+	}).catch((err) => console.log("error", err))
 }
 
 /**
@@ -53,8 +57,8 @@ export const getLoginInfo = () => {
  * @return {Object}
  */
 export const logout = () => {
-  return axios({
-    method: 'get',
-    url: '/logout',
-  }).catch((err) => console.log("error", err))
+	return axios({
+		method: "get",
+		url: "/logout",
+	}).catch((err) => console.log("error", err))
 }

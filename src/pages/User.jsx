@@ -17,7 +17,7 @@ import HistoryTab from "../components/HistoryTab"
 import CollectionTab from "../components/CollectionTab"
 import DynamicTab from "../components/DynamicTab"
 import VideoTab from "../components/VideoTab"
-import { selectAuthState } from "../store/authSlice"
+import { selectAuthState, setIsLoggedIn } from "../store/authSlice"
 import useRequest from "../hooks/useRequest"
 
 const TABS = [
@@ -86,6 +86,7 @@ export default function User() {
 	const handleClick = async () => {
 		const res = await logout()
 		if (res.status && res.code === 0) {
+			dispatch(setIsLoggedIn(false))
 			navigate("/login")
 		}
 	}
