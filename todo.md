@@ -48,10 +48,11 @@
   - [x] cart page
 - [ ] video page
   - [x] video player
+  - [ ] like, coin, collect buttons' onclick
 - [ ] concat some store slice into popular slice
 - [ ] Bottom Menu, switch to 1st menu is too slow
-- [ ] init app to get login stat if the backend crapped, the process should be optimized
 - [ ] 节流优化
+  - [ ] init app to get login stat if the backend crapped, the process should be optimized
   - [ ] PageLayout 中的滚动监听
   - [ ] ShopAllCategory 中的滚动监听（参考:https://mobile.ant.design/zh/components/side-bar 中使用 ahooks 的 useThrottleFn）
 - [ ] bug
@@ -63,7 +64,7 @@
 ### bili-node-api
 
 - [x] login related api
-  - [-] refresh cookie
+  - [ ] refresh cookie
 - [x] user related api
   - [x] favorite collections
   - [x] space 动态

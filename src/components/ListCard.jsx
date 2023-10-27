@@ -3,8 +3,13 @@ import { Image } from "antd-mobile"
 import { px2vw } from "../utils/style"
 import Icon from "./Icon"
 import { round10k, formatDuration, parseDate } from "../utils/global"
+import { useNavigate } from "react-router-dom"
 
 export default function ListCard({ item, isHistory = false }) {
+	const navigate = useNavigate()
+	const handleClick = () => {
+		navigate(`/video/${item.bvid}`)
+	}
 	const durationLabel = isHistory
 		? item.progress < 0
 			? "已看完"
@@ -16,7 +21,7 @@ export default function ListCard({ item, isHistory = false }) {
 		: formatDuration(item.duration)
 
 	return (
-		<Wrapper>
+		<Wrapper onClick={handleClick}>
 			<div className='item-pic'>
 				<Image
 					lazy

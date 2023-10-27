@@ -49,7 +49,7 @@ const Video = () => {
 	return (
 		<Wrapper>
 			<header>
-				<Header title='video page' />
+				<Header title='video page' onClickLeft={()=>navigate(-1)}/>
 			</header>
 			<video
 				ref={video}

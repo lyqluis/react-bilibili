@@ -16,7 +16,7 @@ export const setStore = (key, val) => {
 }
 
 export const setHistoryKeywords = (val = []) => setStore("history_search", val)
-export const getHistoryKeywords = () => getStore("history_search")
+export const getHistoryKeywords = () => getStore("history_search", [])
 
 export const setMallHistoryKeywords = (val = []) =>
 	setStore("mall_history_search", val)
