@@ -51,10 +51,11 @@
   - [ ] like, coin, collect buttons' onclick
 - [ ] concat some store slice into popular slice
 - [ ] Bottom Menu, switch to 1st menu is too slow
-- [ ] 节流优化
+- [ ] 优化
   - [ ] init app to get login stat if the backend crapped, the process should be optimized
-  - [ ] PageLayout 中的滚动监听
-  - [ ] ShopAllCategory 中的滚动监听（参考:https://mobile.ant.design/zh/components/side-bar 中使用 ahooks 的 useThrottleFn）
+  - [ ] 节流优化
+    - [x] PageLayout 中的滚动监听
+    - [x] ShopAllCategory 中的滚动监听（参考:https://mobile.ant.design/zh/components/side-bar 中使用 ahooks 的 useThrottleFn）
 - [ ] bug
   - [x] waterfall 页面热更新后，页数自动增加
   - [ ] 切换 component，图片会重新请求
@@ -76,3 +77,12 @@
     - [ ] change play url from spidering the video page to direct url
   - [x] video detail
   - [ ] recommand related video(can load more depend on page size & page number)
+
+### 优化
+
+#### throttle
+- 写一个 throttle 函数
+  - 参考 lodash.debounce
+- 创建一个 `useThrottle` 钩子
+  - 参考 ahoooks.useThrottleFn
+

@@ -7,6 +7,8 @@ import { selectMallState, setAllCategories } from "../store/mallSlice"
 import styled from "styled-components"
 import { px2vw } from "../utils/style"
 import { useNavigate } from "react-router-dom"
+import useThrottle from "../hooks/useThrottle"
+
 const CateSection = ({ cateType }) => {
 	const navigate = useNavigate()
 	return (
@@ -117,7 +119,7 @@ const ShopAllCategory = () => {
 
 	// when main scrolls, sidebar acitve tab auto change
 	const mainRef = useRef(null)
-	const handleScroll = (e) => {
+	const handleScroll = () => {
 		let currentKey = allCategoryList[0]?.typeName
 		for (const type of allCategoryList) {
 			const el = document.getElementById(`anchor-${type.typeName}`)
@@ -131,12 +133,15 @@ const ShopAllCategory = () => {
 		}
 		setActiveKey(currentKey)
 	}
+	const { run: throttledHandleScroll } = useThrottle(handleScroll, 750)
+
 	useEffect(() => {
 		const mainEl = mainRef.current
 		if (!mainEl) return
-		mainEl.addEventListener("scroll", handleScroll)
+		mainEl.addEventListener("scroll", throttledHandleScroll)
+
 		return () => {
-			mainEl.removeEventListener("scroll", handleScroll)
+			mainEl.removeEventListener("scroll", throttledHandleScroll)
 		}
 	}, [allCategoryList])
 

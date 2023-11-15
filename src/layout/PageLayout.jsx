@@ -5,6 +5,7 @@ import { useState, useRef } from "react"
 import { getScroller } from "../utils/global"
 import { Outlet } from "react-router-dom"
 import PageHeader from "../components/PageHeader"
+import useThrottle from "../hooks/useThrottle"
 
 export default function PageLayout({
 	header = <PageHeader />,
@@ -13,26 +14,32 @@ export default function PageLayout({
 }) {
 	const [headerClass, setHeaderClass] = useState("page-header")
 	const [lastY, setLastY] = useState(0)
-	const refEl = useRef()
+	const refEl = useRef(null)
+	const refScroller = useRef(null)
+
+	const { run: throttledHandleScroll } = useThrottle(() => {
+		const y =
+			refScroller.current.scrollTop ??
+			refScroller.current.scrollY ??
+			refScroller.current.pageYOffset
+		setLastY((oldVal) => {
+			if (oldVal < y && parseInt(px2vw(y + "px")) >= parseInt(px2vw`45px`)) {
+				setHeaderClass(`page-header hidden`)
+				stickyEl && (stickyEl.current.style.top = 0)
+			} else {
+				setHeaderClass(`page-header`)
+				stickyEl && (stickyEl.current.style.top = px2vw("45px"))
+			}
+			return y
+		})
+	}, 750)
 
 	useEffect(() => {
-		const el = getScroller(refEl.current)
-		const handleScroll = el.addEventListener("scroll", () => {
-			const y = el.scrollTop ?? el.scrollY ?? el.pageYOffset
-			setLastY((oldVal) => {
-				if (oldVal < y && parseInt(px2vw(y + "px")) >= parseInt(px2vw`45px`)) {
-					setHeaderClass(`page-header hidden`)
-					stickyEl && (stickyEl.current.style.top = 0)
-				} else {
-					setHeaderClass(`page-header`)
-					stickyEl && (stickyEl.current.style.top = px2vw("45px"))
-				}
-				return y
-			})
-		})
+		const el = (refScroller.current = getScroller(refEl.current))
+		el.addEventListener("scroll", throttledHandleScroll)
 
 		return () => {
-			el.removeEventListener("scroll", handleScroll)
+			el.removeEventListener("scroll", throttledHandleScroll)
 		}
 	}, [])
 
