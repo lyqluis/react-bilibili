@@ -12,7 +12,7 @@ import styled from "styled-components"
 import { px2vw } from "../utils/style"
 import { CardSkeletonList } from "./Skeleton"
 import Icon from "./Icon"
-import { Link, useParams, useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import useRequest from "../hooks/useRequest"
 
 const skeletons = CardSkeletonList(2)
@@ -22,7 +22,7 @@ const CollectionTab = ({ uid }) => {
 	const [loading, setLoading] = useState(null)
 	const userInfo = useSelector(selectUserState("userInfo"))
 	const collectionList = useSelector(selectUserState("collectionList"))
-	// const { userId } = useParams()
+	
 	const {
 		data: favouriteData,
 		finished: favouriteDataFinished,

@@ -30,20 +30,17 @@ export default defineConfig(({ mode }) => {
 				react: "React",
 				"react-dom": "ReactDOM",
 				redux: "Redux",
-				axios: "axios",
 			}),
 			createHtmlPlugin({
 				minify: true,
 				inject: {
 					data: {
 						reactScript:
-							'<script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>',
+							'<script defer src="https://unpkg.com/react@18.2.0/umd/react.production.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>',
 						reactDomScript:
-							'<script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>',
+							'<script defer src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>',
 						reduxScript:
-							'<script src="https://unpkg.com/redux@4.2.1/dist/redux.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>',
-						axiosScript:
-							'<script src="https://unpkg.com/axios@1.3.6/dist/axios.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>',
+							'<script defer src="https://unpkg.com/redux@4.2.1/dist/redux.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>',
 						title: "<title>react-bilibili-app</title>",
 					},
 				},

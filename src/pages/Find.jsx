@@ -12,6 +12,9 @@ import {
 	setHasMore,
 } from "../store/popularSlice"
 import Card from "../components/Card"
+import { CardSkeletonList } from "../components/Skeleton"
+
+const skeletons = CardSkeletonList(10)
 
 export default function Find() {
 	const list = useSelector(selectList)
@@ -28,6 +31,15 @@ export default function Find() {
 		if (!no_more) {
 			dispatch(setPage(page + 1))
 		}
+	}
+
+	if (list.length === 0) {
+		loadMore()
+		return (
+			<Wrapper>
+				<div className='video-list'>{skeletons}</div>
+			</Wrapper>
+		)
 	}
 
 	return (

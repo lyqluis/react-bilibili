@@ -2,10 +2,11 @@ import styled from "styled-components"
 import { List } from "antd-mobile"
 import { px2vw } from "../utils/style"
 
-export default function SearchSuggestion({ list = [], onSelect, loading }) {
+const SearchSuggestion = ({ list = [], onSelect, loading }) => {
 	if (loading) {
-		return 
+		return
 	}
+
 	return (
 		<Wrapper>
 			<List>
@@ -16,7 +17,7 @@ export default function SearchSuggestion({ list = [], onSelect, loading }) {
 							arrow={false}
 							onClick={() => onSelect(item.value ?? item.term ?? item.name)}
 						>
-							{item.name}
+							<span dangerouslySetInnerHTML={{__html: item.name}}></span>
 						</List.Item>
 					)
 				})}
@@ -32,3 +33,5 @@ const Wrapper = styled.div`
 	padding-left: ${px2vw`10px`};
 	padding-right: ${px2vw`10px`};
 `
+
+export default SearchSuggestion

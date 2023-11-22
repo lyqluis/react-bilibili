@@ -61,7 +61,7 @@ export default function Search() {
 		if (!val) return
 		const res = await getSearchSuggestion(val)
 		console.log(res)
-		const list = Reflect.ownKeys(res).map((key) => res[key])
+		const list = res.result.tag
 		dispatch(setSuggestions(list))
 	}
 	const handleFocus = async () => {
@@ -82,7 +82,6 @@ export default function Search() {
 			return res
 		})
 		// res.data.result {Array}
-		// todo parse res.data
 		const videos = parseSearchData(res.data)
 		dispatch(setSearchData(videos))
 	}

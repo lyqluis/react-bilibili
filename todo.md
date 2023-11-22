@@ -52,14 +52,15 @@
 - [ ] concat some store slice into popular slice
 - [ ] Bottom Menu, switch to 1st menu is too slow
 - [ ] 优化
+  - [x] build 优化
   - [ ] init app to get login stat if the backend crapped, the process should be optimized
   - [ ] 节流优化
     - [x] PageLayout 中的滚动监听
     - [x] ShopAllCategory 中的滚动监听（参考:https://mobile.ant.design/zh/components/side-bar 中使用 ahooks 的 useThrottleFn）
+  - [ ] 无限流 loading 改成卡片式骨架
 - [ ] bug
-  - [x] waterfall 页面热更新后，页数自动增加
-  - [ ] 切换 component，图片会重新请求
-    - [ ] 页面的所有数据都随着组件初始化重新请求了
+  - [x] waterfall 页面热更新后，页数自动增加  
+  - [ ] 切换组件，页面的所有数据都随着组件初始化重新请求了
   - [ ] 切换页面，滚动条回滚置顶
 
 ### bili-node-api
