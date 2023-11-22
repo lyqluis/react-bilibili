@@ -66,8 +66,8 @@ const ProductCard = ({ product }) => {
 
 	const navigate = useNavigate()
 	const handleClick = () => {
-		if (product.type === "mallitems") {
-			console.log(product)
+		console.log(product)
+		if (product.type === "mallitems" || product.type === "") {
 			navigate(`/shop/product/${product.itemsId}`)
 		}
 	}

@@ -1,7 +1,7 @@
 import Layout from "@/layout/Layout"
 import Find from "@/pages/Find"
 import Error from "@/pages/Error"
-import { lazy, Suspense } from "react"
+import { lazy, Suspense, memo } from "react"
 import Loading from "@/components/Loading"
 import PageLayout from "../layout/PageLayout"
 import RequireAuth from "../components/RequireAuth"

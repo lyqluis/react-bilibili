@@ -1,6 +1,7 @@
 import { getMediaUrl } from "../api/video"
 import { isCodecSupported } from "./global"
 import { SourceBuffer } from "./sourceBuffer"
+import { throttle } from "./debounce"
 
 export default class Player {
 	constructor(videoEl, bvid) {
@@ -24,7 +25,7 @@ export default class Player {
 		this.e = {
 			onSourceOpen: this.onSourceOpen.bind(this),
 			onSeeking: this.onSeeking.bind(this),
-			onTimeUpdate: this.onTimeUpdate.bind(this),
+			onTimeUpdate: throttle(this.onTimeUpdate.bind(this), 900),
 		}
 	}
 

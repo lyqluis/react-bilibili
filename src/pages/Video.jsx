@@ -8,7 +8,7 @@ import styled from "styled-components"
 import { px2vw } from "../utils/style"
 import Icon from "../components/Icon"
 import { useNavigate } from "react-router-dom"
-import { Ellipsis, InfiniteScroll } from "antd-mobile"
+import { Ellipsis, Image, InfiniteScroll } from "antd-mobile"
 import Card from "../components/Card"
 
 // TODO some video play url got 403
@@ -28,6 +28,7 @@ const Video = () => {
 	useEffect(() => {
 		const fetchvideoInfo = async () => {
 			const res = await getVideoInfo(bvid)
+			// todo can't fetch res without login
 			const { View } = res.data
 			const onlineRes = await getVideoOnline(bvid, View.cid)
 			View.online = onlineRes.data
@@ -41,15 +42,21 @@ const Video = () => {
 			player.init(res)
 		}
 
-		if (pagePlayer.current) pagePlayer.current.destroy()
 		fetchvideoInfo()
 		createVideo()
+
+		return () => {
+			if (pagePlayer.current) pagePlayer.current.destroy()
+		}
 	}, [bvid])
 
 	return (
 		<Wrapper>
 			<header>
-				<Header title='video page' onClickLeft={()=>navigate(-1)}/>
+				<Header
+					title='video page'
+					onClickLeft={() => navigate(-1)}
+				/>
 			</header>
 			<video
 				ref={video}
@@ -63,9 +70,10 @@ const Video = () => {
 			<h3>
 				<div className='up-card'>
 					<div className='up-avatar'>
-						<img
+						<Image
 							src={videoInfo?.Card?.card?.face}
-							alt='up image'
+							width='100%'
+							height='100%'
 						/>
 					</div>
 					<div className='up-info'>

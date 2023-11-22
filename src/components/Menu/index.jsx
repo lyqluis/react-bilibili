@@ -4,11 +4,11 @@ import { Link } from "react-router-dom"
 import Icon from "../Icon"
 import { useDispatch, useSelector } from "react-redux"
 import { changeMenuIndex } from "./slice"
-import { useEffect } from "react"
+import { useEffect, memo } from "react"
 import { useLocation } from "react-router-dom"
 import { px2vw } from "../../utils/style"
 
-export default function Menu() {
+const Menu = () => {
 	const currentMenu = useSelector((state) => menu[state.menu.currentIndex])
 	const dispatch = useDispatch()
 	const location = useLocation()
@@ -82,3 +82,5 @@ const Wrapper = styled.menu`
 		}
 	}
 `
+
+export default Menu

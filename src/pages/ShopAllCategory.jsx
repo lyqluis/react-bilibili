@@ -1,4 +1,4 @@
-import { SideBar } from "antd-mobile"
+import { Image, SideBar } from "antd-mobile"
 import useRequest from "../hooks/useRequest"
 import { getMallCategories } from "../api/mall"
 import { useState, useEffect, useRef } from "react"
@@ -44,7 +44,10 @@ const CateSection = ({ cateType }) => {
 							}}
 						>
 							<div className='img'>
-								<img
+								<Image
+									lazy
+									width='100%'
+									height='100%'
 									src={cate.img}
 									alt={cate.name}
 								/>
