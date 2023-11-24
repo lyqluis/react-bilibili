@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react"
 import { getAllWeekly, getWeekly } from "../api/popular"
-import useFetch from "../hooks/useFetch"
+import useRequest from "../hooks/useRequest"
 import { useDispatch, useSelector } from "react-redux"
 import {
 	selectPopularState,
@@ -43,7 +43,7 @@ const WeeklyList = ({ list = [], loading }) => {
 }
 
 const Weekly = () => {
-	const { data: allWeeklyData, finished } = useFetch(getAllWeekly)
+	const { data: allWeeklyData, finished } = useRequest(getAllWeekly)
 	const [urlQuery, setUrlQuery] = useSearchParams()
 	const weekly = useSelector(selectPopularState("weekly"))
 	const weeklyInfo = useSelector(selectPopularState("weeklyInfo"))

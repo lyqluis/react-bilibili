@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react"
-import useFetch from "../hooks/useFetch"
 import { Tabs } from "antd-mobile"
 import { useNavigate } from "react-router-dom"
 import { useParams } from "react-router-dom"
 import RankTab from "../components/RankTab"
 import styled from "styled-components"
 import { getRankChannels } from "../api/rank"
+import useRequest from "../hooks/useRequest"
 
 export default function Rank() {
-	const { loading, data, finished } = useFetch(getRankChannels)
+	const { loading, data, finished } = useRequest(getRankChannels)
 	const [channels, setChannels] = useState([])
 	const [activeChannel, setActiveChannel] = useState(null)
 	const navigate = useNavigate()

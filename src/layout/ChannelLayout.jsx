@@ -1,13 +1,15 @@
 import { Outlet } from "react-router-dom"
-import useFetch from "../hooks/useFetch"
+import useRequest from "../hooks/useRequest"
 import { getAllChannels } from "../api/channel"
 import { useEffect } from "react"
-import { useDispatch } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { setChannels, initChannelsVideos } from "../store/channelSlice"
+import { selectChannelState } from "../store/channelSlice"
 
 export default function ChannelLayout() {
-	const { loading, data } = useFetch(getAllChannels)
+	const { loading, data } = useRequest(getAllChannels)
 	const dispatch = useDispatch()
+	const channels = useSelector(selectChannelState("channels"))
 
 	useEffect(() => {
 		if (data) {
@@ -21,7 +23,7 @@ export default function ChannelLayout() {
 		}
 	}, [data])
 
-	if (loading) return <p>loading</p>
+	if (!channels.length) return <p>loading</p>
 
 	return <Outlet />
 }

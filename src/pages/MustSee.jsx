@@ -1,11 +1,11 @@
 import { useEffect } from "react"
 import { getMustSee } from "../api/popular"
-import useFetch from "../hooks/useFetch"
 import { useDispatch, useSelector } from "react-redux"
 import { selectPopularState, setMustSeeList } from "../store/popularSlice"
 import { List } from "antd-mobile"
 import ListCard from "../components/ListCard"
 import { ListCardSkeleton } from "../components/Skeleton"
+import useRequest from "../hooks/useRequest"
 
 const skeletons = new Array(10).fill(null).map((_, i) => (
 	<List.Item key={i}>
@@ -15,7 +15,7 @@ const skeletons = new Array(10).fill(null).map((_, i) => (
 
 const MustSee = () => {
 	const mustSeeList = useSelector(selectPopularState("mustSeeList"))
-	const { data, finished } = useFetch(getMustSee, mustSeeList)
+	const { data, finished } = useRequest(getMustSee, mustSeeList)
 	const dispatch = useDispatch()
 
 	useEffect(() => {

@@ -1,6 +1,6 @@
 import PageLayout from "../layout/PageLayout"
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useMemo } from "react"
 import { getFilterObj, formateFilter, defaultFilter } from "../utils/mallHelper"
 import { transObjToQuery } from "../utils/global"
 import { getProducts } from "../api/mall"
@@ -119,6 +119,18 @@ const ShopList = ({ isSearchResult }) => {
 		}
 	}, [])
 
+	const productList = useMemo(() => {
+		return products.map((item) => {
+			return (
+				<ProductCard
+					className='item'
+					key={item.itemsId}
+					product={item}
+				/>
+			)
+		})
+	}, [products])
+
 	if (isSearch) {
 		return (
 			<ShopSearch
@@ -179,15 +191,7 @@ const ShopList = ({ isSearchResult }) => {
 					// }
 				}}
 			>
-				{products.map((item) => {
-					return (
-						<ProductCard
-							className='item'
-							key={item.itemsId}
-							product={item}
-						/>
-					)
-				})}
+				{productList}
 			</WaterFall>
 
 			{isRenderFinished && (

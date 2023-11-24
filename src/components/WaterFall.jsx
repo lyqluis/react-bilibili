@@ -6,15 +6,15 @@ const WaterFall = ({
 	padding = 10,
 	gap = 10,
 	children,
-	onRender = () => {},
-	onRenderFinished = () => {},
+	onRender,	// () => {}
+	onRenderFinished,	// () => {}
 }) => {
 	const containerRef = useRef(null)
 	const [totalHeight, setTotalHeight] = useState(0)
 	const heights = new Array(col).fill(0)
 
 	useLayoutEffect(() => {
-		onRender()
+		onRender && onRender()
 		const totalWidth = containerRef.current.offsetWidth
 		const width = (totalWidth - padding * 2 - gap * (col - 1)) / col
 		const nodeList = containerRef.current.children
@@ -46,7 +46,7 @@ const WaterFall = ({
 			heights[minHeightIndex] += gap + height
 		}
 		setTotalHeight(Math.max(...heights))
-		onRenderFinished()
+		onRenderFinished && onRenderFinished()
 	}, [children])
 
 	return (

@@ -11,7 +11,7 @@ import {
 	getChannelRecommendVidoes,
 } from "../api/channel"
 import { deduplication } from "../utils/global"
-import useFetch from "../hooks/useFetch"
+import useRequest from "../hooks/useRequest"
 import { CardSkeletonList } from "./Skeleton"
 
 const ChannelTab = forwardRef(({ channel, active }, ref) => {
@@ -19,8 +19,9 @@ const ChannelTab = forwardRef(({ channel, active }, ref) => {
 	const channelVideos = useSelector(selectChannelVideos(channel.name))
 	const [hasMore, setHasMore] = useState(true)
 	const [page, setPage] = useState(0)
-	const { data: rcmdData, finished: rcmdFinished } = useFetch(() =>
-		getChannelRecommendVidoes(channel.rid)
+	const { data: rcmdData, finished: rcmdFinished } = useRequest(
+		getChannelRecommendVidoes,
+		{ params: [channel.rid] }
 	)
 
 	const skeletonList = CardSkeletonList(8)

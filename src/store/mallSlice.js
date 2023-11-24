@@ -60,15 +60,16 @@ const mallSlice = createSlice({
 			state.productsList = action.payload
 		},
 		setIndexProducts: (state, action) => {
-			const oldList = state.index.feeds?.list
+			const oldList = state.index.feeds?.list ?? []
 			const newList = []
 			// 去重
 			const { list } = action.payload
-			list.map((item) => {
-				if (!oldList.find((p) => p.id === item.id)) {
-					newList.push(item)
-				}
-			})
+			oldList?.length &&
+				list.map((item) => {
+					if (!oldList.find((p) => p.id === item.id)) {
+						newList.push(item)
+					}
+				})
 			action.payload.list = [...oldList, ...newList]
 			state.index = {
 				...state.index,

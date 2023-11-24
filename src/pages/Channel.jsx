@@ -12,7 +12,7 @@ export default function Channel() {
 	const { channelName, childChannelName } = useParams()
 	const channels = useSelector(selectChannelState("channels"))
 	const [activeParent, setActiveParent] = useState(channels[0])
-	const [activeChannel, setActiveChannel] = useState(channels[0].children[0])
+	const [activeChannel, setActiveChannel] = useState(channels[0]?.children[0])
 
 	useEffect(() => {
 		let active = activeChannel,

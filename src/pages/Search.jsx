@@ -27,7 +27,7 @@ import HotSearch from "../components/HotSearch"
 import SearchSuggestion from "../components/SearchSuggestion"
 import SearchResult from "../components/SearchResult"
 import SearchHistory from "../components/SearchHistory"
-import useFetch from "../hooks/useFetch"
+import useRequest from "../hooks/useRequest"
 import { useSearchParams } from "react-router-dom"
 
 const parseSearchData = (data, type = "video") => {
@@ -94,12 +94,12 @@ export default function Search() {
 		data: hotSearchData,
 		loading: hotSearchLoading,
 		finished: hotSearchFinished,
-	} = useFetch(getHotSearch)
+	} = useRequest(getHotSearch)
 	useEffect(() => {
 		hotSearchFinished && dispatch(setHotSearches(hotSearchData.list))
 	}, [hotSearchFinished])
 
-	const { data: placeholderData, finished: placeholderFinished } = useFetch(
+	const { data: placeholderData, finished: placeholderFinished } = useRequest(
 		getSearchpPlaceholder
 	)
 	useEffect(() => {

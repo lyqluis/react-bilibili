@@ -1,5 +1,5 @@
 - [x] Search page
-  - [ ] useRequest => useFetch
+  - [x] useRequest =replace=> useFetch
 - [x] weekly page
 - [x] MustSee page
 - [x] qr code component
@@ -53,15 +53,16 @@
 - [ ] Bottom Menu, switch to 1st menu is too slow
 - [ ] 优化
   - [x] build 优化
-  - [ ] 节流优化
+  - [ ] 节流优化（参考 ahooks 的 useThrottleFn）
     - [x] PageLayout 中的滚动监听
-    - [x] ShopAllCategory 中的滚动监听（参考:https://mobile.ant.design/zh/components/side-bar 中使用 ahooks 的 useThrottleFn）
+    - [x] ShopAllCategory 中的滚动监听
     - [x] player 中 timeupdate 监听
   - [x] 首屏无限流 loading 改成卡片式骨架
+  - [x] 使用 lazy() 和 Suspense 进行组件懒加载
 - [ ] bug
   - [x] waterfall 页面热更新后，页数自动增加
   - [x] /shop/list click product card don't navigate to product page
-  - [ ] /shop 报错（TypeError: Cannot read properties of undefined (reading 'find')）
+  - [x] /shop 报错（TypeError: Cannot read properties of undefined (reading 'find')）
   - [ ] cannot fetch video's info without login
   - [ ] 切换组件，页面的所有数据都随着组件初始化重新请求了
   - [ ] 切换页面，滚动条回滚置顶

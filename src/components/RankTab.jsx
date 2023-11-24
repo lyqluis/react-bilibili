@@ -1,5 +1,5 @@
 import { List } from "antd-mobile"
-import useFetch from "../hooks/useFetch"
+import useRequest from "../hooks/useRequest"
 import { getRank } from "../api/rank"
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
@@ -9,9 +9,9 @@ import styled from "styled-components"
 import { ListCardSkeleton } from "./Skeleton"
 
 export default function RankTab({ channel, onClick }) {
-	const { data, finished } = useFetch(() =>
-		getRank(channel.rid > 0 ? channel.rid : "")
-	)
+	const { data, finished } = useRequest(getRank, {
+		params: [channel.rid > 0 ? channel.rid : ""],
+	})
 	const rankList = useSelector(selectChannelRank(channel.name))
 	const dispatch = useDispatch()
 

@@ -1,52 +1,53 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useMemo } from "react"
 
-const useRequest = (fetchFn, options = {
-  manual: false,
-  ready: true,
-  pollingInterval: 0,
-  deps: [],
-}) => {
-  const [loading, setLoading] = useState(false)
-  const [finished, setFinished] = useState(false)
-  const [data, setData] = useState(null)
-  const [err, setErr] = useState(null)
+const defaultOptions = {
+	manual: false,
+	ready: true,
+	params: [],
+	pollingInterval: 0,
+	deps: [],
+}
 
-  const {
-    manual = false,
-    // initialData = null,
-    ready = true,
-    pollingInterval = 0,
-    deps = []
-  } = options
+const useRequest = (fetchFn, options) => {
+	const [loading, setLoading] = useState(false)
+	const [finished, setFinished] = useState(false)
+	const [data, setData] = useState(null)
+	const [err, setErr] = useState(null)
 
-  useEffect(() => {
-    if (!manual) {
-      request()
-    }
-  }, [manual, ...deps])
+	// todo optimize options
+	options = Object.assign(defaultOptions, options)
+	const { manual, params, ready, pollingInterval, deps } = options
 
-  const request = async () => {
-    try {
-      setLoading(true)
-      setFinished(false)
-      setErr(null)
-      // todo pollinginterval timeout
-      const res = await fetchFn()
-      console.log(fetchFn.name, res)
-      setData(res)
-    } catch (err) {
-      console.log(JSON.stringify(err))
-      setErr(err)
-    } finally {
-      setLoading(false)
-      setFinished(true)
-    }
-  }
+	const request = async () => {
+		try {
+      // debugger
+			setLoading(true)
+			setFinished(false)
+			setErr(null)
+			// todo pollinginterval timeout
+			const res = await fetchFn(...params)
+			console.log(fetchFn.name, res)
+			setData(res)
+		} catch (err) {
+			console.log(JSON.stringify(err))
+			setErr(err)
+		} finally {
+			setLoading(false)
+			setFinished(true)
+		}
+	}
 
-  // 缓存
-  const cachedData = useCallback(() => data, [data])
+	useEffect(() => {
+		if (!manual) {
+			request()
+		}
+	}, [manual, ...deps])
 
-  return { loading, data, finished, err, request, cachedData }
+	// 缓存
+	// const cachedData = useCallback(() => data, [data])
+	const cachedData = useMemo(() => data, [data])
+
+	return { loading, data, finished, err, request, cachedData }
 }
 
 export default useRequest

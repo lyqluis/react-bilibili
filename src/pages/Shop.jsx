@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { getMallIndex, getMallIndexProducts } from "../api/mall"
 import { Image, InfiniteScroll } from "antd-mobile"
 import { SearchBar } from "antd-mobile"
@@ -56,6 +56,18 @@ export default function Shop() {
 			dispatch(setIndex(vo))
 		}
 	}, [data, finished])
+
+	const productList = useMemo(() => {
+		return products.map((item) => {
+			return (
+				<ProductCard
+					className='item'
+					key={item.id}
+					product={item}
+				/>
+			)
+		})
+	}, [products])
 
 	if (isSearch) {
 		return (
@@ -132,15 +144,7 @@ export default function Shop() {
 					setHasMore(true)
 				}}
 			>
-				{products.map((item) => {
-					return (
-						<ProductCard
-							className='item'
-							key={item.id}
-							product={item}
-						/>
-					)
-				})}
+				{productList}
 			</WaterFall>
 
 			{isRenderFinished && (
