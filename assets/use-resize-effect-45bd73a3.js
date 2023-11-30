@@ -1,1 +1,0 @@
-import{au as e,av as n}from"./index-c769d5fd.js";function i(i,r){const o=e(i);n((()=>{const e=r.current;if(e){if(window.ResizeObserver){let n;const i=new ResizeObserver((()=>{n=window.requestAnimationFrame((()=>o(e)))}));return i.observe(e),()=>{window.cancelAnimationFrame(n),i.disconnect()}}o(e)}}),[r])}export{i as u};
